@@ -12,7 +12,7 @@ const  navDataSchema = new Schema({
 })
 
 const  cardsSchema = new Schema({
-	id: Number,
+	id: String,
 	imgUrl: String,
 	label_0: Number,
 	label_1: Number,

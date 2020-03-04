@@ -1,5 +1,5 @@
 const router = require('koa-router')()
-const {uploadFile }  =require('../utils/index')
+const {uploadFile, md5 }  =require('../utils/index')
 
 router.prefix('/learn')
 
@@ -30,7 +30,8 @@ router.post('/image', async (ctx) => {
 		const imgUrl = await uploadFile(ctx, 'images')
 		ctx.body ={
 			code: 200,
-			imgUrl
+			imgUrl,
+			file: ctx.request.files.file
 		}
 	} catch(err) {
 		ctx.body = {
@@ -65,7 +66,8 @@ router.post('/getCards', async(ctx) => {
 				label_1: aSelected[1],
 				label_2: aSelected[2]
 			}
-			let cards =  await learnCards.find(query).sort({timeStamp: 1}).select({_id: 0, __v:0})
+			// 默认按时间降序，新的优先
+			let cards =  await learnCards.find(query).sort({timeStamp: -1}).select({_id: 0, __v:0})
       
 			ctx.body = {
 				code: 200,
@@ -87,7 +89,7 @@ router.post('/getCards', async(ctx) => {
 })
 // 接口保留，用于实现后台功能
 async  function updateImgUrl() {
-	const imgUrl = 'http://localhost:3000/images/15832553795062087.jpg'
+	const imgUrl = 'http://localhost:3000/images/30de0228f2d1c2861023c4460b4c3062.jpg'
 	try{
 		let res = await learnCards.updateMany({}, {$set:{imgUrl}})
 		console.log('success', res)
@@ -96,22 +98,35 @@ async  function updateImgUrl() {
 	}
 }
 // updateImgUrl()
-// 用于更新原始数据库
-// router.post('/uploadCards', async (ctx) => {
-// 	let allCardList = ctx.request.body.allCardList
-// 	try {
-// 		await learnCardList.insertMany(allCardList)
-// 		console.log('success')
-// 		ctx.body = {
-// 			code: 200
-// 		}
-// 	} catch (err) {
-// 		console.log(err)
-// 		ctx.body = {
-// 			code: -1,
-// 			err
-// 		}
-// 	}
-// })
+
+router.post('/uploadCards', async (ctx) => {
+	let body = ctx.request.body
+	const aSelected = JSON.parse(body.aSelected)
+	try {
+		let card = {
+			title : body.title,
+			uploader : '暂放',  //TODO: 应涉及用户对象
+			id: md5(body.articleUrl),  // 以加密后的文章url加唯一标志
+			timeStamp: body.timeStamp || new Date().getTime(), // 考虑，保留发送情况
+			imgUrl: await uploadFile(ctx, 'images'),
+			label_0: aSelected[0],
+			label_1: aSelected[1],
+			label_2: aSelected[2]
+		}
+		let res = await learnCards.insertMany(card)
+    
+		ctx.body = {
+			code: 200,
+			res,
+			card
+		}
+	} catch (err) {
+		console.log(err)
+		ctx.body = {
+			code: -1,
+			err
+		}
+	}
+})
 
 module.exports = router
