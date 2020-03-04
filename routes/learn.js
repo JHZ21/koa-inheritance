@@ -5,8 +5,25 @@ router.prefix('/learn')
 
 const {
 	learnNavData,
-	learnCards
+	learnCards,
+	learnRotationUrl
 } = require('../model')
+
+router.get('/rotationUrl', async (ctx) => {
+	try {
+		let data = await learnRotationUrl.find({})
+		let rotationUrl = data.map(obj => obj.url)
+		ctx.body = {
+			code: 200,
+			rotationUrl
+		}
+	} catch(err) {
+		ctx.body = {
+			code: -1,
+			err
+		}
+	}
+})
 
 router.post('/image', async (ctx) => {
 	try {
@@ -41,11 +58,6 @@ router.get('/getNavData', async (ctx) => {
 
 router.post('/getCards', async(ctx) => {
 	let aSelected= ctx.request.body.aSelected
-	console.log(typeof aSelected)
-	console.log( aSelected)
-	// aSelected = JSON.parse(aSelected)
-	// console.log(typeof aSelected)
-	// console.log( aSelected)
 	try {
 		if(aSelected && aSelected.length >=2) {
 			let query = {
@@ -73,6 +85,7 @@ router.post('/getCards', async(ctx) => {
 		}
 	}
 })
+// 接口保留，用于实现后台功能
 async  function updateImgUrl() {
 	const imgUrl = 'http://localhost:3000/images/15832553795062087.jpg'
 	try{
