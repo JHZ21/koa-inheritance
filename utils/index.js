@@ -2,6 +2,17 @@ const fs = require('fs')
 const path = require('path')
 const config = require('../config/index')
 const md5 = require('md5')
+const axios = require('axios')
+
+exports.isAllowedFrame = async (url) =>  {
+	try {
+		const res = await axios.get(url)
+		return !res.headers['x-frame-options']
+	} catch(err) {
+		console.log(err)
+	}
+}
+
 
 exports.md5 = (val) => md5(val)
 

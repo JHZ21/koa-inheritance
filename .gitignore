@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /dist
+test.js
 # /public/images/*
 
 # local env files

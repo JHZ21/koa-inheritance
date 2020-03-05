@@ -1,7 +1,9 @@
 const router = require('koa-router')()
-const {uploadFile, md5 }  =require('../utils/index')
+const {uploadFile, md5, isAllowedFrame }  =require('../utils/index')
+
 
 router.prefix('/learn')
+
 
 const {
 	learnNavData,
@@ -106,6 +108,8 @@ router.post('/uploadCards', async (ctx) => {
 		let card = {
 			title : body.title,
 			uploader : '暂放',  //TODO: 应涉及用户对象
+			articleUrl: body.articleUrl,
+			isAllowedFrame: await isAllowedFrame(body.articleUrl),
 			id: md5(body.articleUrl),  // 以加密后的文章url加唯一标志
 			timeStamp: body.timeStamp || new Date().getTime(), // 考虑，保留发送情况
 			imgUrl: await uploadFile(ctx, 'images'),
@@ -113,7 +117,7 @@ router.post('/uploadCards', async (ctx) => {
 			label_1: aSelected[1],
 			label_2: aSelected[2]
 		}
-		let res = await learnCards.insertMany(card)
+		let res = await learnCards.update({id: card.id}, card, {upsert: true})
     
 		ctx.body = {
 			code: 200,
