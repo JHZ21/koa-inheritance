@@ -2,6 +2,7 @@
 node_modules
 /dist
 test.js
+tool.js
 # /public/images/*
 
 # local env files
