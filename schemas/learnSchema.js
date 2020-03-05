@@ -13,6 +13,8 @@ const  navDataSchema = new Schema({
 
 const  cardsSchema = new Schema({
 	id: String,
+	articleUrl: String,
+	isAllowedFrame: Boolean,
 	imgUrl: String,
 	label_0: Number,
 	label_1: Number,
