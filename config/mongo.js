@@ -1,7 +1,9 @@
 const mongoose = require('mongoose').set('debug', false) // debug:true 打印数据库操作
 const config = require('./index.js')
 const options = {
-	autoReconnect: true
+	autoReconnect: true,
+	useUnifiedTopology: true ,
+	useNewUrlParser: true 
 }
 
 

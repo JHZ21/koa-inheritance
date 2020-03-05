@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const rotationUrl = new Schema({
+const rotationUrlSchema = new Schema({
 	url: String
 })
 
@@ -15,6 +15,7 @@ const  cardsSchema = new Schema({
 	id: String,
 	articleUrl: String,
 	isAllowedFrame: Boolean,
+	readVolume: Number,
 	imgUrl: String,
 	label_0: Number,
 	label_1: Number,
@@ -24,8 +25,15 @@ const  cardsSchema = new Schema({
 	timeStamp: Number
 })
 
+const contentSchema = new Schema({
+	id: String,
+	articleUrl: String,
+	comments: Array
+})
+
 module.exports = {
 	navDataSchema,
 	cardsSchema,
-	rotationUrl
+	rotationUrlSchema,
+	contentSchema
 }
