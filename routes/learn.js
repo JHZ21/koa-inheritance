@@ -130,10 +130,7 @@ router.post('/getCards', async(ctx) => {
 				label_2: aSelected[2]
 			}
 			// 默认按时间降序，新的优先
-			let cards =  await learnCards.find(query).sort({timeStamp: -1}).select({_id: 0})
-			let findRes = await learnCards.findOne({'label_0': 0})
-			console.log('findRes: ', findRes)
-      
+			let cards =  await learnCards.find(query).sort({timeStamp: -1}).select({_id: 0})      
 			ctx.body = {
 				code: 200,
 				aSelected,

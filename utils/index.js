@@ -9,7 +9,11 @@ exports.isAllowedFrame = async (url) =>  {
 		const res = await axios.get(url)
 		return !res.headers['x-frame-options']
 	} catch(err) {
-		console.log(err)
+		if(err.response && err.response.headers){
+			return !err.response.headers['x-frame-options']
+		}
+		console.log('err', err)
+		return false
 	}
 }
 
