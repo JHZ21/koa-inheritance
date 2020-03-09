@@ -9,11 +9,8 @@ const koaBody = require('koa-body')
 const mongoConfig = require('./config/mongo')
 const fs = require('fs')
 
-// const index = require('./routes/index')
-// const users = require('./routes/users')
-// const learn = require('./routes/learn')
 
-app.use(cors()) // cors 允许跨域
+app.use(cors({})) // cors 允许跨域
 
 mongoConfig.connect()
 

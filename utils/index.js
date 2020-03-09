@@ -4,12 +4,27 @@ const config = require('../config/index')
 const md5 = require('md5')
 const axios = require('axios')
 
+exports.ceateUserId = () => {
+	//(注册时间戳字符穿+4位随机数)压缩为16位
+	const timeStr = '' + new Date().getTime() + Math.floor(Math.random() * 1e4)
+	return compress(timeStr)
+}
+
+exports.validAccount = (value) => {
+	const iphoneReg = /^1\d{10}$/
+	return iphoneReg.test(value)
+}
+
 exports.isAllowedFrame = async (url) =>  {
 	try {
 		const res = await axios.get(url)
 		return !res.headers['x-frame-options']
 	} catch(err) {
-		console.log(err)
+		if(err.response && err.response.headers){
+			return !err.response.headers['x-frame-options']
+		}
+		console.log('err', err)
+		return false
 	}
 }
 

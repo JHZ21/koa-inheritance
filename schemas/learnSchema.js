@@ -31,6 +31,8 @@ const contentSchema = new Schema({
 	comments: Array
 })
 
+
+
 module.exports = {
 	navDataSchema,
 	cardsSchema,
