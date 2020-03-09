@@ -7,6 +7,13 @@ const {
 
 router.prefix('/user')
 
+const userInfoSelect  = {
+	_id: 0, 
+	pw: 0,
+	__v:0,
+	account: 0
+}
+
 
 router.post('/register', async (ctx) => {
 	const body = ctx.request.body
@@ -52,7 +59,6 @@ router.post('/register', async (ctx) => {
 
 router.post('/login', async (ctx) => {
 	try {
-
 		const body = ctx.request.body
 		let pwEqual = false
 		if(body && validAccount(body.account) && body.pw ){
@@ -61,7 +67,7 @@ router.post('/login', async (ctx) => {
 				pwEqual = compress(body.pw) === res[0].pw
 			}
 			if(pwEqual) {
-				const userRes= await users.find({account: body.account}).select({_id: 0, pw: 0, __v:0, account: 0})
+				const userRes= await users.find({account: body.account}).select(userInfoSelect)
 				const userInfo = userRes[0]
 				ctx.cookies.set(
 					'userId', userInfo.userId,
@@ -71,11 +77,9 @@ router.post('/login', async (ctx) => {
 						overwirte: false
 					}
 				)
-				userInfo.userId = undefined
 				ctx.body = {
 					code: 200,
-					msg: '登陆成功',
-					userInfo
+					msg: '登陆成功'
 				}
 			} else {
 				ctx.body = {
@@ -98,5 +102,56 @@ router.post('/login', async (ctx) => {
 	}
 })
 
+// TODO: cookie userId 有效，是否应该返回新的cookie
+router.post('/getUserInfo', async (ctx) => {
+	try {
+		const userId = ctx.cookies.get('userId')
+		console.log('userId: ', userId)
+		if(userId) {
+			const userRes = await users.findOne({userId}).select(userInfoSelect)
+			if(userRes) {
+				const userInfo = userRes
+				// 返回新有效时间cookie
+				ctx.cookies.set(
+					'userId', userId,
+					{
+						maxAge: 30 * 60 * 1000 , // 30分钟
+						httpOnly: true,
+						overwirte: false
+					}
+				)
+				ctx.body ={
+					code: 200,
+					userInfo
+				}
+			} else {
+				ctx.body = {
+					code: -1
+				}
+			}
+		}else {
+			ctx.body = {
+				code: -1
+			}
+		}
+	} catch(err) {
+		ctx.body = {
+			code: -1
+		}
+	}
+})
+
+router.get('/signOut', (ctx) => {
+	ctx.cookies.set(
+		'userId', '',
+		{
+			httpOnly: true,
+			overwirte: false
+		}
+	)
+	ctx.body = {
+		code: 200
+	}
+})
 
 module.exports = router

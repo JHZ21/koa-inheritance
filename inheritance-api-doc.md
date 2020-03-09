@@ -108,6 +108,79 @@ https://blog.qiufengh.com/blog/
 
 
 
+### UserSignOut api
+
+> httponly userId 前端自己无法修改，让后端来注销
+
+- 请求路径：/user/signOut
+- 请求方法：get
+- 请求参数
+
+| 属性 | 值类型 | 备注 |
+| ---- | ------ | ---- |
+|      |        |      |
+
+- 响应参数
+
+| 属性 | 值类型 | 备注 |
+| ---- | ------ | ---- |
+| code |        |      |
+
+- 响应数据
+
+```json
+{
+  "code": 200
+}
+```
+
+
+
+
+
+
+
+### GETUSERINFO api
+
+- 请求路径：/user/getUserInfo
+- 请求方法：post
+- 请求参数
+
+| 属性   | 值类型 | 备注   |
+| ------ | ------ | ------ |
+| userId | string | 用户id |
+
+- 响应参数
+
+| 参数     | 参数类型 | 参数备注              |
+| -------- | -------- | --------------------- |
+| code     | number   | 状态 200:成功 -1:成功 |
+| userInfo | object   | 用户信息              |
+
+- 响应数据
+
+```json
+{
+  "code": 200,
+  "userInfo": 
+    {
+      "roles": [],
+      "name": "用户1111",
+      "headUrl": "http://localhost:3000/images/21c1c757d6e124f4.gif"
+    }
+  
+}
+{
+  "code": -1
+}
+```
+
+
+
+
+
+
+
 ### UserLogin api
 
 - 请求路径：/user/login
@@ -121,10 +194,11 @@ https://blog.qiufengh.com/blog/
 
 - 响应参数
 
-| 参数 | 参数类型 | 参数备注              |
-| ---- | -------- | --------------------- |
-| code | number   | 状态 200:成功 -1:成功 |
-| msg  | string   | 信息                  |
+| 参数     | 参数类型 | 参数备注              |
+| -------- | -------- | --------------------- |
+| code     | number   | 状态 200:成功 -1:成功 |
+| msg      | string   | 信息                  |
+| userInfo | object   |                       |
 
 - 响应数据
 
@@ -132,14 +206,13 @@ https://blog.qiufengh.com/blog/
 {
   "code": 200,
   "msg": "登陆成功",
-  "userInfo": [
+  "userInfo": 
     {
       "roles": [],
-      "userId": "7354d9ca7a0b13cd",
       "name": "用户1111",
       "headUrl": "http://localhost:3000/images/21c1c757d6e124f4.gif"
     }
-  ]
+  
 }
 {
   "code": -1,
