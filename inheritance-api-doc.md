@@ -108,6 +108,49 @@ https://blog.qiufengh.com/blog/
 
 
 
+### UserLogin api
+
+- 请求路径：/user/login
+- 请求方法：post
+- 请求参数
+
+| 属性    | 值类型 | 备注       |
+| ------- | ------ | ---------- |
+| account | string | 暂为手机号 |
+| pw      | string | 密码       |
+
+- 响应参数
+
+| 参数 | 参数类型 | 参数备注              |
+| ---- | -------- | --------------------- |
+| code | number   | 状态 200:成功 -1:成功 |
+| msg  | string   | 信息                  |
+
+- 响应数据
+
+```json
+{
+  "code": 200,
+  "msg": "登陆成功",
+  "userInfo": [
+    {
+      "roles": [],
+      "userId": "7354d9ca7a0b13cd",
+      "name": "用户1111",
+      "headUrl": "http://localhost:3000/images/21c1c757d6e124f4.gif"
+    }
+  ]
+}
+{
+  "code": -1,
+  "msg"： "登录失败"
+}
+```
+
+
+
+
+
 ### UserRegister api
 
 - 请求路径：/user/register
