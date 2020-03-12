@@ -14,7 +14,6 @@ const userInfoSelect  = {
 	account: 0
 }
 
-
 router.post('/register', async (ctx) => {
 	const body = ctx.request.body
 	try {
