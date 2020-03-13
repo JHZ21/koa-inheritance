@@ -11,6 +11,7 @@ const {
 } = require('../model')
 
 
+// learn
 const updateLearnCards = async (josn1, json2) => {
 	try {
 		let res = await learnCards.updateMany(josn1, json2)
@@ -19,8 +20,6 @@ const updateLearnCards = async (josn1, json2) => {
 		console.log('err: ', err)
 	}
 }
-// updateLearnCards({}, {$unset: {__v: 0 }})
-// updateLearnCards({}, {$set: {readVolume: 1 }})
 
 // 接口保留，用于实现后台功能
 async function updateLearnCardsImgUrl(imgUrl) {

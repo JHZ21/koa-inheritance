@@ -8,9 +8,13 @@ const cors = require('koa-cors')
 const koaBody = require('koa-body')
 const mongoConfig = require('./config/mongo')
 const fs = require('fs')
+const sslify = require('koa-sslify').default
 
+
+app.use(sslify({port: 4433})) // 强制转为https 端口设为4433
 
 app.use(cors({})) // cors 允许跨域
+
 
 mongoConfig.connect()
 
