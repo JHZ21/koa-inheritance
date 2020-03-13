@@ -53,5 +53,5 @@ exports.uploadFile =  (file, dir) => {
 	// 创建写入流
 	const upStream = fs.createWriteStream(newFilePath)
 	reader.pipe(upStream)
-	return `${config.urlBase}${dir}/${newFileName}`
+	return `${dir}/${newFileName}`
 }

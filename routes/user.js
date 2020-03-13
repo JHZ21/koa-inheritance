@@ -153,4 +153,15 @@ router.get('/signOut', (ctx) => {
 	}
 })
 
+
+//update user
+const updateUser = async (josn1, json2) => {
+	try {
+		let res = await users.updateMany(josn1, json2)
+		console.log('success: ', res)
+	} catch (err) {
+		console.log('err: ', err)
+	}
+}
+
 module.exports = router
