@@ -200,6 +200,15 @@ https://blog.qiufengh.com/blog/
 | msg      | string   | 信息                  |
 | userInfo | object   |                       |
 
+- 返回 cookies 
+
+| 参数       | 参数类型 | 参数备注   |
+| ---------- | -------- | ---------- |
+| userId     | string   | 用户id     |
+| userIdSign | stirng   | 用户id签名 |
+
+
+
 - 响应数据
 
 ```json
@@ -265,35 +274,94 @@ https://blog.qiufengh.com/blog/
 
 
 
-### LearnAddReadVolume api
+### LearnUploadCard
 
-- 请求路径：/learn/addReadVolume
-- 请求方法：get
+- 请求路径：/learn/uploadCard
+- 请求方法：post
 - 请求参数
 
-| 属性   | 值类型 | 备注                     |
-| ------ | ------ | ------------------------ |
-| id     | string | 为文章url的md5加密字符串 |
-| userId | string | 用户标志                 |
+| 属性       | 值类型   | 备注       |
+| ---------- | -------- | ---------- |
+| title      | string   | 标题       |
+| articleUrl | string   | 文章路径   |
+| timeStamp  | number   | 创立时间戳 |
+| uploader   | 未定     | 上传者信息 |
+| aSelected  | number[] | 分类数组   |
 
 - 响应参数
 
-| 参数       | 参数类型 | 参数备注                 |
-| ---------- | -------- | ------------------------ |
-| id         | string   | 为文章url的md5加密字符串 |
-| articleUrl | string   | id对应的文章url          |
-| comments   | Array    | 评论区对象               |
+| 参数 | 参数类型 | 参数备注 |
+| ---- | -------- | -------- |
+| code |          |          |
+
+- 响应数据
+
+```json
+
+```
+
+
+
+
+
+
+
+### LearnAddReadVolume api
+
+- 请求路径：/learn/addReadVolume
+- 请求方法：post
+- 请求参数
+
+| 属性                | 值类型 | 备注                                                         |
+| ------------------- | ------ | ------------------------------------------------------------ |
+| dailyRead           | array  | 每日已阅读过的文章id                                         |
+| dailyRead.timeStamp | number | 每日第一次提交的时间戳(后端写入)，用于使得每人每天每篇文章阅读量只能加+1 |
+| sign                | string | 信息签名(确保信息不被篡改)                                   |
+| newRead             | array  | 新阅读文章id                                                 |
+
+- 请求数据
+
+```json
+{
+ dailyRead:{
+ 	oldRead: [
+        'dsewd',"ewsdsde"
+    ],
+ 	timeStamp: 1578452885584
+ },
+ sign: 'dsiwjeijsosdsw',
+ newRead: ["dsdwed"]
+}
+```
+
+- 响应参数
+
+| 属性      | 值类型   | 备注                                                         |
+| --------- | -------- | ------------------------------------------------------------ |
+| code      | nubmer   |                                                              |
+| dailyRead | string[] | 每日阅读过的文章id                                           |
+| timeStamp | string   | 每日第一次提交的时间戳(后端写入)，用于使得每人每天每篇文章阅读量只能加+1 |
+| sign      | string   | 新的信息签名                                                 |
 
 - 响应数据
 
 ```json
 {
   "code": 200,
-  "content": {
-    "id": "707bff0a2d780e5bec9f560b180ad680",
-    "articleUrl": "https://blog.qiufengh.com/blog/",
-    "comments": []
-  }
+  "dailyRead": {
+    "oldRead": [
+      "41760e06ccea3781"
+    ],
+    "timeStamp": 1584259772101
+  },
+  "sign": "d6ce865673d1d8664d02c8e6572504ac1b2a62008c8ee8e056c7b8a6e394a9f3",
+  "resArr": [
+    {
+      "n": 1,
+      "nModified": 1,
+      "ok": 1
+    }
+  ]
 }
 ```
 
