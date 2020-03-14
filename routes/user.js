@@ -1,5 +1,5 @@
 const router = require('koa-router')()
-const {validAccount, ceateUserId, compress }  =require('../utils/index')
+const {validAccount, ceateUserId, compress, crypto16, isLogin }  =require('../utils/index')
 
 const {
 	users
@@ -76,6 +76,14 @@ router.post('/login', async (ctx) => {
 						overwirte: false
 					}
 				)
+				ctx.cookies.set(
+					'userIdSign', crypto16(userInfo.userId),
+					{
+						maxAge: 30 * 60 * 1000 , // 30分钟
+						httpOnly: true,
+						overwirte: false
+					}
+				)
 				ctx.body = {
 					code: 200,
 					msg: '登陆成功'
@@ -106,13 +114,22 @@ router.post('/getUserInfo', async (ctx) => {
 	try {
 		const userId = ctx.cookies.get('userId')
 		console.log('userId: ', userId)
-		if(userId) {
+		console.log('isLogin', isLogin(ctx))
+		if(isLogin(ctx)) {
 			const userRes = await users.findOne({userId}).select(userInfoSelect)
 			if(userRes) {
 				const userInfo = userRes
 				// 返回新有效时间cookie
 				ctx.cookies.set(
 					'userId', userId,
+					{
+						maxAge: 30 * 60 * 1000 , // 30分钟
+						httpOnly: true,
+						overwirte: false
+					}
+				)
+				ctx.cookies.set(
+					'userIdSign', crypto16(userId),
 					{
 						maxAge: 30 * 60 * 1000 , // 30分钟
 						httpOnly: true,
@@ -135,7 +152,8 @@ router.post('/getUserInfo', async (ctx) => {
 		}
 	} catch(err) {
 		ctx.body = {
-			code: -1
+			code: -1,
+			err
 		}
 	}
 })
@@ -143,6 +161,13 @@ router.post('/getUserInfo', async (ctx) => {
 router.get('/signOut', (ctx) => {
 	ctx.cookies.set(
 		'userId', '',
+		{
+			httpOnly: true,
+			overwirte: false
+		}
+	)
+	ctx.cookies.set(
+		'userIdSign', '',
 		{
 			httpOnly: true,
 			overwirte: false

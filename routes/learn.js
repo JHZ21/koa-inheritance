@@ -1,5 +1,5 @@
 const router = require('koa-router')()
-const {uploadFile, compress, isAllowedFrame }  =require('../utils/index')
+const {uploadFile, compress, isAllowedFrame, isLogin, crypto16, sameDay, nextDayTime }  =require('../utils/index')
 
 router.prefix('/learn')
 
@@ -60,6 +60,111 @@ const updateLearnContent = async (content) => {
 		}
 	}
 }
+
+router.post('/addReadVolume', async (ctx) => { 
+	try {
+		// 要求已登陆
+		if(!isLogin(ctx)){
+			ctx.body ={
+				code: -1,
+				msg: '未登陆'
+			}
+			return ''
+		}
+		const {body} = ctx.request
+		const now = new Date()
+		const dailyRead = body.dailyRead
+		const newRead = body.newRead
+
+		if(dailyRead
+    && dailyRead.timeStamp
+    && body.sign 
+    && newRead
+    && crypto16(body.dailyRead) === body.sign
+		) {
+			// 信息完备且合法
+			if(newRead && newRead.length <1) {
+				// 未有新阅读文章
+				ctx.body = {
+					code: -1,
+					msg: `newRead:${newRead}`
+				}
+				return ''
+			}
+			const oldRead =  dailyRead.oldRead
+			if(dailyRead.timeStamp <= now.getTime()) {			
+			// if(dailyRead.timeStamp < now.getTime()) {			
+				const resArr = []
+				let modifiedNum = 0
+				// 遍历 阅读+1
+				for(let key =0; key < newRead.length; key++) {
+					const newArticleId = newRead[key]
+					if(!oldRead.includes(newArticleId)) {
+						console.log('will add +1', newArticleId)
+						const res = await learnCards.updateOne({id: newArticleId}, {$inc: {readVolume: +1}})
+						if(res.nModified) {
+							modifiedNum++
+							// 成功修改后,添加到oldRaed
+							oldRead.push(newArticleId)
+						}
+						resArr.push(res)
+					}
+				}
+				if(modifiedNum) {
+					// 数据库没有更新
+					ctx.body = {
+						code: -1,
+						dailyRead,
+						sign: crypto16(dailyRead),
+						newRead: [],
+						resArr
+					}
+				} else{
+					// 数据库有更新
+					ctx.body = {
+						code: 200,
+						dailyRead,
+						sign: crypto16(dailyRead),
+						newRead: [],
+						resArr
+					}
+				}
+				
+			} else {
+				// 未到允许时间
+				ctx.body = {
+					code: -1,
+					msg:'未到允许时间'
+				}
+			}
+      
+		} else {
+			// 信息不完备或者非法
+			// 信息被篡改或者第一次访问,设置新的dailyRead
+			const newDailyRead = {
+				oldRead: [],
+				timeStamp: nextDayTime()
+			}
+			// timeStamp 若已为下一天，则留用旧值
+			if(dailyRead && dailyRead.timeStamp){
+				newDailyRead.timeStamp = nextDayTime(dailyRead.timeStamp)
+			}
+			ctx.body = {
+				code: -1,
+				dailyRead: newDailyRead,
+				sign: crypto16(newDailyRead),
+				newRead: newRead || [],
+				msg: '设置新的dailyRead'
+			}
+		}
+	} catch(err) {
+		ctx.body = {
+			code: -1,
+			msg: '报错',
+			err
+		}
+	}
+})
 
 router.post('/getContent', async (ctx) => {
 	try {
