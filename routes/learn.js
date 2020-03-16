@@ -110,7 +110,7 @@ router.post('/addReadVolume', async (ctx) => {
 						resArr.push(res)
 					}
 				}
-				if(modifiedNum) {
+				if(modifiedNum === 0) {
 					// 数据库没有更新
 					ctx.body = {
 						code: -1,
