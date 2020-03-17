@@ -5,23 +5,32 @@ const axios = require('axios')
 const crypto = require('crypto')
 
 
+
+
 const nextDayTime = (time) => {
-	const nextDayDate = new Date(new Date().getTime() + 24*3600*1000)
-	const nextDayTime = nextDayDate.getTime()
+	const nextDayTime = +new Date(new Date().getTime() + 24*3600*1000)
 	let resTime = nextDayTime
 	if(!time) return resTime
 	time = +time
 	// time 若已为下一天，则留用
-	if(sameDay(nextDayDate, new Date(time))){
+	if(isSameDay(nextDayTime, time)){
 		resTime = time
 	}
 	return resTime
 }
 
-const sameDay = (now, date) => {
-	return (now.getFullYear() === date.getFullYear()
-  && now.getMonth() === date.getMonth()
-  && now.getDate() ===date.getDate())
+const isBeforeDay = (time) => {
+	const nowTime = +new Date()
+	return time < nowTime && !isSameDay(time, nowTime)
+}
+
+
+const isSameDay = (aTime, bTime) => {
+	const aDate = new Date(aTime)
+	const bDate = new Date(bTime)
+	return (aDate.getFullYear() === bDate.getFullYear()
+  && aDate.getMonth() === bDate.getMonth()
+  && aDate.getDate() ===bDate.getDate())
 }
 const isLogin = (ctx) => {
 	const {cookies} = ctx
@@ -35,7 +44,7 @@ const crypto16 = (obj) => {
 	const key = 'crypto16#qw-@'
 	const sign = crypto.createHmac('sha256',key)
 	sign.update(JSON.stringify(obj))
-	return sign.digest('hex') // 返回格式16位
+	return sign.digest('hex').slice(0, 16) // 返回格式64位的首部16位
 }
 const ceateUserId = () => {
 	//(注册时间戳字符穿+4位随机数)压缩为16位
@@ -90,6 +99,7 @@ const uploadFile =  (file, dir) => {
 
 
 module.exports = {
+	isBeforeDay,
 	nextDayTime,
 	crypto16,
 	isLogin,
@@ -98,5 +108,5 @@ module.exports = {
 	isAllowedFrame,
 	compress,
 	uploadFile,
-	sameDay
+	isSameDay
 }

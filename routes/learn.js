@@ -1,5 +1,5 @@
 const router = require('koa-router')()
-const {uploadFile, compress, isAllowedFrame, isLogin, crypto16, sameDay, nextDayTime }  =require('../utils/index')
+const {uploadFile, compress, isAllowedFrame, isLogin, crypto16, isBeforeDay, nextDayTime }  =require('../utils/index')
 
 router.prefix('/learn')
 
@@ -83,7 +83,8 @@ router.post('/addReadVolume', async (ctx) => {
     && crypto16(body.dailyRead) === body.sign
 		) {
 			// 信息完备且合法
-			if(newRead && newRead.length <1) {
+			// 如有是newRead 为[],并且timeStamp 不是以前天的，则拒绝
+			if(newRead.length <1 && !isBeforeDay(dailyRead.timeStamp)) {
 				// 未有新阅读文章
 				ctx.body = {
 					code: -1,
@@ -91,26 +92,33 @@ router.post('/addReadVolume', async (ctx) => {
 				}
 				return ''
 			}
-			const oldRead =  dailyRead.oldRead
-			if(dailyRead.timeStamp <= now.getTime()) {			
-			// if(dailyRead.timeStamp < now.getTime()) {			
+      
+			if(dailyRead.timeStamp <= +now) {			
 				const resArr = []
 				let modifiedNum = 0
 				// 遍历 阅读+1
+				const addedRead = []
+				// 若是今天以前的， 则重设dailyRead
+				if(isBeforeDay(dailyRead.timeStamp)){
+					dailyRead.oldRead = []
+					dailyRead.timeStamp = +now
+				}
 				for(let key =0; key < newRead.length; key++) {
 					const newArticleId = newRead[key]
-					if(!oldRead.includes(newArticleId)) {
+					if(!dailyRead.oldRead.includes(newArticleId)) {
 						console.log('will add +1', newArticleId)
 						const res = await learnCards.updateOne({id: newArticleId}, {$inc: {readVolume: +1}})
 						if(res.nModified) {
 							modifiedNum++
-							// 成功修改后,添加到oldRaed
-							oldRead.push(newArticleId)
+							// 成功修改后,添加到addedRead
+							addedRead.push(newArticleId)
 						}
 						resArr.push(res)
 					}
 				}
-				if(modifiedNum) {
+				dailyRead.oldRead.push(...addedRead)
+				
+				if(modifiedNum === 0) {
 					// 数据库没有更新
 					ctx.body = {
 						code: -1,
