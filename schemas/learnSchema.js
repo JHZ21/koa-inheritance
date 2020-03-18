@@ -14,15 +14,16 @@ const  navDataSchema = new Schema({
 const  cardsSchema = new Schema({
 	id: String,
 	articleUrl: String,
+	title: String,
+	uploader: Object,
 	isAllowedFrame: Boolean,
-	readVolume: Number,
 	imgUrl: String,
+	readVolume: Number,
 	label_0: Number,
 	label_1: Number,
 	label_2: Number,
-	title: String,
-	uploader: String,
-	timeStamp: Number
+	timeStamp: Number,
+	show: Boolean
 })
 
 const contentSchema = new Schema({

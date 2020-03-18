@@ -4,6 +4,65 @@
 
 
 
+## doc: learnCardList
+
+> 文章卡片数据
+
+### schema
+
+| 属性           | 值类型  | 备注                                   |
+| -------------- | ------- | -------------------------------------- |
+| id             | String  | 文章标致符，有articleUrl hash而来 16位 |
+| articleUrl     | String  | 文章链接                               |
+| title          | string  | 文章标题，介绍                         |
+| uploader       | object  | 上传者信息,  object: 可扩展性好        |
+| imgUrl         | string  | 头像链接，无协议和host                 |
+| timeStamp      | number  | 创建时间戳                             |
+| readVolume     | number  | 文章阅读量                             |
+| isAllowedFrame | boolean | 网页frame是否允许跨域                  |
+| label_0        | number  | 分类1的key                             |
+| label_1        | number  | 分类2的key                             |
+| label_2        | number  | 分类3的key                             |
+| show           | boolean | 是否展示，false: 被删除,不展示         |
+
+```
+uploader: {
+	"name": "abc"
+}
+```
+
+
+
+### example
+
+```
+{
+    "_id" : ObjectId("5e5e0dae6f3b8d6e6827c8aa"),
+    "imgUrl" : "images/05bd483854f98760.jpg",
+    "label_0" : 8,
+    "label_1" : 20,
+    "label_2" : 3,
+    "title" : "九可参式前县造风压西市物间。",
+    "id" : 2222,
+    "uploader" : "常秀兰",
+    "timeStamp" : 1555172878960.0,
+    "readVolume" : 1,
+    "show" : false
+}
+```
+
+### data
+
+```js
+
+```
+
+
+
+
+
+
+
 ## doc: users
 
 > 存储用户信息
@@ -285,8 +344,13 @@ https://blog.qiufengh.com/blog/
 | title      | string   | 标题       |
 | articleUrl | string   | 文章路径   |
 | timeStamp  | number   | 创立时间戳 |
-| uploader   | 未定     | 上传者信息 |
 | aSelected  | number[] | 分类数组   |
+
+> uploader 的userId ，随cookie发送到后端，
+>
+> 而且有userIdSign, 发送者信息不易伪造，更安全
+
+
 
 - 响应参数
 
