@@ -4,59 +4,265 @@
 
 
 
-## doc: users
+## CompetProjects doc
 
-> 存储用户信息
+> 竞赛导航数据
 
-### schema
+* schema
 
-| 属性    | 值类型   | 备注                                                         |
-| ------- | -------- | ------------------------------------------------------------ |
-| userId  | string   | 用户id:  标志符 (注册时间戳字符穿+4位随机数)压缩为16位       |
-| name    | string   | 用户名                                                       |
-| pw      | string   | （compress）加密后的密码 16位                                |
-| headUrl | string   | 头像链接                                                     |
-| account | number   | 账号(暂定手机号，QQ申请中)                                   |
-| roles   | string[] | 角色、职能， admin: 管理员， tourist：游客, user: 已经注册的用户 |
+| 属性     | 值类型   | 备注             |
+| -------- | -------- | ---------------- |
+| id       | string   | 项目id,随机 16位 |
+| PName    | string   | 项目名           |
+| PSummary | string   | 项目介绍         |
+| TName    | string   | 队名             |
+| TMembers | object[] | 成员信息         |
+| label_0  | number   | 分类1的key       |
+| label_1  | number   | 分类2的key       |
+| show     | boolean  | 是否展示         |
 
-### example
+* example
 
 ```
 {
-    id: "1111",
-    articleUrl: "https://www.baidu.com/",
-    comments: []
+    "_id" : ObjectId("5e737b935a3aa7d47c4cf337"),
+    "id" : 128320832,
+    "PName" : "hhhhhh",
+    "PSummary" : "拉丁字母（以英语字母为代表）表与西里尔字母（与俄语字母为代表）表中的第一个字母。这个字母在很多领域均有应用，代表的含义各不相同，比如在物理中表示电",
+    "TName" : "ABC",
+    "TMembers" : [ 
+        {
+            "name" : "336"
+        }, 
+        {
+            "name" : "226"
+        }
+    ],
+    "label_0" : 0,
+    "label_1" : 0,
+    "show" : true
 }
 ```
 
-### data
+
+
+
+
+## CompetNavData doc
+
+> 竞赛导航数据
+
+* schema
+
+| 属性  | 值类型                    | 备注         |
+| ----- | ------------------------- | ------------ |
+| index | number                    | 分类顺序     |
+| label | string                    | 分类名       |
+| aData | string[] \| string[]array | 分类下的选项 |
+
+* example
+
+```
+{
+    "_id" : ObjectId("5e5db47f9f02667a2b1087de"),
+    "index" : 0,
+    "label" : "方向:",
+    "aData" : [ 
+        "前端", 
+        "后端", 
+        "数据库", 
+        "计算机原理", 
+        "移动端", 
+        "大数据"
+    ]
+}
+```
+
+* data
 
 ```js
-// 管理员
-// 密码：'abc'
-{
-    useId: "a20bcabdec498400",
-    name: "abc",
-    pw: "3cd24fb0d6963f7d",
-    headUrl: "http://localhost:3000/images/21c1c757d6e124f4.gif",
-    account: 17858884444,
-    roles: ["admin"]
-}
-
-17858881111
-pw: 1111
-
+const nav_data = [
+  {
+    label: "比赛:",
+    aData: [
+      "浙江省大学生多媒体作品设计竞赛",
+      "中国大学生计算机设计大赛",
+      `中国"互联网+"大学生创新创业大赛`,
+      "国创",
+      "新苗",
+      "春萌"
+    ]
+  },
+  {
+    label: "时间:",
+    aData: [
+      [
+        "2020上",
+        "2019下",
+        "2019上",
+        "2018下",
+        "2018上",
+        "2017下",
+        "2017上",
+        "2016下",
+        "2016上"
+      ],
+      [
+        "2020上",
+        "2019下",
+        "2019上",
+        "2018下",
+        "2018上",
+        "2017下",
+        "2017上",
+        "2016下",
+        "2016上"
+      ],
+      [
+        "2020上",
+        "2019下",
+        "2019上",
+        "2018下",
+        "2018上",
+        "2017下",
+        "2017上",
+        "2016下",
+        "2016上"
+      ],
+      [
+        "2020上",
+        "2019下",
+        "2019上",
+        "2018下",
+        "2018上",
+        "2017下",
+        "2017上",
+        "2016下",
+        "2016上"
+      ],
+      [
+        "2020上",
+        "2019下",
+        "2019上",
+        "2018下",
+        "2018上",
+        "2017下",
+        "2017上",
+        "2016下",
+        "2016上"
+      ],
+      [
+        "2020上",
+        "2019下",
+        "2019上",
+        "2018下",
+        "2018上",
+        "2017下",
+        "2017上",
+        "2016下",
+        "2016上"
+      ]
+    ]
+  }
+]
 ```
 
 
 
 
 
-## doc:  learnContent
+
+
+
+
+## learnCardList doc
+
+> 文章卡片数据
+
+* schema
+
+| 属性           | 值类型  | 备注                                   |
+| -------------- | ------- | -------------------------------------- |
+| id             | String  | 文章标致符，有articleUrl hash而来 16位 |
+| articleUrl     | String  | 文章链接                               |
+| title          | string  | 文章标题，介绍                         |
+| uploader       | object  | 上传者信息,  object: 可扩展性好        |
+| imgUrl         | string  | 头像链接，无协议和host                 |
+| timeStamp      | number  | 创建时间戳                             |
+| readVolume     | number  | 文章阅读量                             |
+| isAllowedFrame | boolean | 网页frame是否允许跨域                  |
+| label_0        | number  | 分类1的key                             |
+| label_1        | number  | 分类2的key                             |
+| label_2        | number  | 分类3的key                             |
+| show           | boolean | 是否展示，false: 被删除,不展示         |
+
+```
+uploader: {
+	"name": "abc"
+}
+```
+
+* example
+
+```
+{
+    "_id" : ObjectId("5e5e0dae6f3b8d6e6827c8aa"),
+    "imgUrl" : "images/05bd483854f98760.jpg",
+    "label_0" : 8,
+    "label_1" : 20,
+    "label_2" : 3,
+    "title" : "九可参式前县造风压西市物间。",
+    "id" : 2222,
+    "uploader" : "常秀兰",
+    "timeStamp" : 1555172878960.0,
+    "readVolume" : 1,
+    "show" : false
+}
+```
+
+
+
+
+
+##  learnNavData doc
+
+> 关于学习文章分类导航
+
+* schema
+
+| 属性  | 值类型                    | 备注         |
+| ----- | ------------------------- | ------------ |
+| index | number                    | 分类顺序     |
+| label | string                    | 分类名       |
+| aData | string[] \| string[]array | 分类下的选项 |
+
+* example
+
+```
+{
+    "_id" : ObjectId("5e5db47f9f02667a2b1087de"),
+    "index" : 0,
+    "label" : "方向:",
+    "aData" : [ 
+        "前端", 
+        "后端", 
+        "数据库", 
+        "计算机原理", 
+        "移动端", 
+        "大数据"
+    ]
+}
+```
+
+
+
+
+
+## learnContent doc
 
 > 关于 LearnContent Page 
 
-### schema
+* schema
 
 | 属性       | 值类型 | 备注                     |
 | ---------- | ------ | ------------------------ |
@@ -64,7 +270,7 @@ pw: 1111
 | articleUrl | string | id对应的文章url          |
 | comments   | Array  | 评论区对象               |
 
-### example
+* example
 
 ```
 {
@@ -74,7 +280,7 @@ pw: 1111
 }
 ```
 
-### data
+* data
 
 ```js
 https://blog.csdn.net/m0_37747665/article/details/83213276
@@ -100,7 +306,532 @@ https://blog.qiufengh.com/blog/
 
 
 
+## learnRotationUrl doc
+
+> 关于  learn 页面的轮播图路径
+
+* schema
+
+| 属性 | 值类型 | 备注     |
+| ---- | ------ | -------- |
+| url  | string | 图片路径 |
+
+* example
+
+```
+{
+    "_id" : ObjectId("5e6b6db261fcb538f6b88c7b"),
+    "url" : "images/55a74100a4762b71.jpg"
+}
+```
+
+
+
+
+
+## users doc
+
+> 存储用户信息
+
+* schema
+
+| 属性    | 值类型   | 备注                                                         |
+| ------- | -------- | ------------------------------------------------------------ |
+| userId  | string   | 用户id:  标志符 (注册时间戳字符穿+4位随机数)压缩为16位       |
+| name    | string   | 用户名                                                       |
+| pw      | string   | （compress）加密后的密码 16位                                |
+| headUrl | string   | 头像链接                                                     |
+| account | number   | 账号(暂定手机号，QQ申请中)                                   |
+| roles   | string[] | 角色、职能， admin: 管理员， tourist：游客, user: 已经注册的用户 |
+
+* example
+
+```
+{
+    id: "1111",
+    articleUrl: "https://www.baidu.com/",
+    comments: []
+}
+```
+
+* data
+
+```js
+// 管理员
+// 密码：'abc'
+{
+    useId: "a20bcabdec498400",
+    name: "abc",
+    pw: "3cd24fb0d6963f7d",
+    headUrl: "http://localhost:3000/images/21c1c757d6e124f4.gif",
+    account: 17858884444,
+    roles: ["admin"]
+}
+
+17858884444
+pw:abc
+roles:["admin"]
+
+17858881111
+pw: 1111
+
+```
+
+
+
+
+
+
+
 # inheritance 前台 API 文档
+
+
+
+## Compet
+
+
+
+### CompetUploadProject api
+
+- 请求路径：/compet/uploadProject
+- 请求方法：post
+- 请求参数
+
+| 属性      | 值类型   | 备注                 |
+| --------- | -------- | -------------------- |
+| id        | number   | 项目id,随机          |
+| PName     | string   | 项目名               |
+| PSummary  | string   | 项目介绍             |
+| TName     | string   | 队名                 |
+| TMembers  | object[] | 成员信息 userId,name |
+| aSelected | number[] | 分类信息             |
+| img       | file     | 图片文件             |
+| show      | boolean  | 是否展示             |
+
+> uploader 的userId ，随cookie发送到后端，
+>
+> 而且有userIdSign, 发送者信息不易伪造，更安全
+
+
+
+- 响应参数
+
+| 参数 | 参数类型 | 参数备注 |
+| ---- | -------- | -------- |
+| code |          |          |
+
+- 响应数据
+
+```json
+
+```
+
+
+
+
+
+
+
+
+
+### CompetProjects api
+
+- 请求路径：/compet/getProjects
+- 请求方法：post
+- 请求参数
+
+| 属性      | 值类型   | 备注     |
+| --------- | -------- | -------- |
+| aSelected | number[] | 分类数组 |
+
+- 响应参数
+
+| 参数  | 参数类型 | 参数备注     |
+| ----- | -------- | ------------ |
+| code  |          |              |
+| cards | object[] | 项目卡片数组 |
+
+- 响应数据
+
+```json
+{
+  "code": 200,
+  "cards": [
+    {
+    },
+    ......
+      ]   
+ }
+```
+
+
+
+
+
+### CompetNavData api
+
+- 请求路径：/compet/getNavData
+- 请求方法：get
+- 请求参数
+
+| 属性 | 值类型 | 备注 |
+| ---- | ------ | ---- |
+|      |        |      |
+
+
+
+- 响应参数
+
+| 参数    | 参数类型 | 参数备注 |
+| ------- | -------- | -------- |
+| code    | number   |          |
+| navData | object[] | 导航数据 |
+
+- 响应数据
+
+```json
+{
+    code: 200,
+    navData: [
+        {
+            "_id" :  ObjectId("5e5db47f9f02667a2b1087de"),
+            "index" : 0,
+            "label" : "方向:",
+            "aData" : [ 
+                "前端", 
+                "后端", 
+                "数据库", 
+                "计算机原理", 
+                "移动端", 
+                "大数据"
+            ]
+        },
+      .......
+    ]
+}
+```
+
+
+
+
+
+## Learn 
+
+
+
+
+
+### LearnGetCards api
+
+- 请求路径：/learn/getCards
+- 请求方法：post
+- 请求参数
+
+| 属性      | 值类型   | 备注     |
+| --------- | -------- | -------- |
+| aSelected | number[] | 分类数组 |
+
+> uploader 的userId ，随cookie发送到后端，
+>
+> 而且有userIdSign, 发送者信息不易伪造，更安全
+
+
+
+- 响应参数
+
+| 参数  | 参数类型 | 参数备注 |
+| ----- | -------- | -------- |
+| code  |          |          |
+| cards | object[] | 卡片数组 |
+
+- 响应数据
+
+```json
+{
+  "code": 200,
+  "cards": [
+    {
+      "id": "bae22dbce66c9129",
+      "__v": 0,
+      "articleUrl":"https://juejin.im/post/5d3a6d9e51882570d50f5566",
+      "imgUrl": "images/acd48d93a8a4b9d0.png",
+      "isAllowedFrame": false,
+      "label_0": 0,
+      "label_1": 0,
+      "label_2": 0,
+      "readVolume": 1,
+      "show": true,
+      "timeStamp": 1584546169590,
+      "title": "解密初、中、高级程序员的进化之路（前端）",
+      "uploader": {
+        "name": "用户1111"
+      }
+    },
+    ......
+      ]   
+ }
+```
+
+
+
+
+
+### LearnRotationUrl api
+
+- 请求路径：/learn/rotationUrl
+- 请求方法：get
+- 请求参数
+
+| 属性 | 值类型 | 备注 |
+| ---- | ------ | ---- |
+|      |        |      |
+
+
+
+- 响应参数
+
+| 参数        | 参数类型 | 参数备注   |
+| ----------- | -------- | ---------- |
+| code        | number   |            |
+| rotationUrl | string[] | 轮播图路径 |
+
+- 响应数据
+
+```json
+{
+    code: 200,
+    rotationUrl: [
+	    "url" : "images/55a74100a4762b71.jpg"，
+     	 .......
+    ]
+}
+```
+
+
+
+
+
+### LearnNavData api
+
+- 请求路径：/learn/getNavData
+- 请求方法：get
+- 请求参数
+
+| 属性 | 值类型 | 备注 |
+| ---- | ------ | ---- |
+|      |        |      |
+
+- 响应参数
+
+| 参数    | 参数类型 | 参数备注 |
+| ------- | -------- | -------- |
+| code    | number   |          |
+| navData | object[] | 导航数据 |
+
+- 响应数据
+
+```json
+{
+    code: 200,
+    navData: [
+        {
+            "_id" :  ObjectId("5e5db47f9f02667a2b1087de"),
+            "index" : 0,
+            "label" : "方向:",
+            "aData" : [ 
+                "前端", 
+                "后端", 
+                "数据库", 
+                "计算机原理", 
+                "移动端", 
+                "大数据"
+            ]
+        },
+      .......
+    ]
+}
+```
+
+
+
+
+
+### LearnUploadCard api
+
+- 请求路径：/learn/uploadCard
+- 请求方法：post
+- 请求参数
+
+| 属性       | 值类型   | 备注       |
+| ---------- | -------- | ---------- |
+| title      | string   | 标题       |
+| articleUrl | string   | 文章路径   |
+| timeStamp  | number   | 创立时间戳 |
+| aSelected  | number[] | 分类数组   |
+| img        | file     | 图片       |
+
+> uploader 的userId ，随cookie发送到后端，
+>
+> 而且有userIdSign, 发送者信息不易伪造，更安全
+
+
+
+- 响应参数
+
+| 参数 | 参数类型 | 参数备注 |
+| ---- | -------- | -------- |
+| code |          |          |
+
+- 响应数据
+
+```json
+
+```
+
+
+
+
+
+
+
+### LearnAddReadVolume api
+
+- 请求路径：/learn/addReadVolume
+- 请求方法：post
+- 请求参数
+
+| 属性                | 值类型 | 备注                                                         |
+| ------------------- | ------ | ------------------------------------------------------------ |
+| dailyRead           | array  | 每日已阅读过的文章id                                         |
+| dailyRead.timeStamp | number | 每日第一次提交的时间戳(后端写入)，用于使得每人每天每篇文章阅读量只能加+1 |
+| sign                | string | 信息签名(确保信息不被篡改)                                   |
+| newRead             | array  | 新阅读文章id                                                 |
+
+- 请求数据
+
+```json
+{
+ dailyRead:{
+ 	oldRead: [
+        'dsewd',"ewsdsde"
+    ],
+ 	timeStamp: 1578452885584
+ },
+ sign: 'dsiwjeijsosdsw',
+ newRead: ["dsdwed"]
+}
+```
+
+- 响应参数
+
+| 属性      | 值类型   | 备注                                                         |
+| --------- | -------- | ------------------------------------------------------------ |
+| code      | nubmer   |                                                              |
+| dailyRead | string[] | 每日阅读过的文章id                                           |
+| timeStamp | string   | 每日第一次提交的时间戳(后端写入)，用于使得每人每天每篇文章阅读量只能加+1 |
+| sign      | string   | 新的信息签名                                                 |
+
+- 响应数据
+
+```json
+{
+  "code": 200,
+  "dailyRead": {
+    "oldRead": [
+      "41760e06ccea3781"
+    ],
+    "timeStamp": 1584259772101
+  },
+  "sign": "d6ce865673d1d8664d02c8e6572504ac1b2a62008c8ee8e056c7b8a6e394a9f3",
+  "resArr": [
+    {
+      "n": 1,
+      "nModified": 1,
+      "ok": 1
+    }
+  ]
+}
+```
+
+
+
+
+
+##  LearnContent 
+
+
+
+###  LearnGetContent api
+
+- 请求路径：/learn/getContent
+- 请求方法：post
+- 请求参数
+
+| 属性       | 值类型 | 备注                     |
+| ---------- | ------ | ------------------------ |
+| id         | string | 为文章url的md5加密字符串 |
+| articleUrl | string | id对应的文章url          |
+| comments   | Array  | 评论区对象 可选          |
+
+- 响应参数
+
+| 参数       | 参数类型 | 参数备注                 |
+| ---------- | -------- | ------------------------ |
+| id         | string   | 为文章url的md5加密字符串 |
+| articleUrl | string   | id对应的文章url          |
+| comments   | Array    | 评论区对象               |
+
+- 响应数据
+
+```json
+{
+  "code": 200,
+  "content": {
+    "id": "707bff0a2d780e5bec9f560b180ad680",
+    "articleUrl": "https://blog.qiufengh.com/blog/",
+    "comments": []
+  }
+}
+```
+
+
+
+###  learnUpdateContent api
+
+- 请求路径：/learn/updateContent
+- 请求方法：post
+- 请求参数
+
+| 属性       | 值类型 | 备注                     |
+| ---------- | ------ | ------------------------ |
+| id         | string | 为文章url的md5加密字符串 |
+| articleUrl | string | id对应的文章url          |
+| comments   | Array  | 评论区对象, 可选         |
+
+- 响应参数
+
+| 参数       | 参数类型 | 参数备注                 |
+| ---------- | -------- | ------------------------ |
+| id         | string   | 为文章url的md5加密字符串 |
+| articleUrl | string   | id对应的文章url          |
+| comments   | Array    | 评论区对象               |
+
+- 响应数据
+
+```json
+{
+  "code": 200,
+  "content": {
+    "id": "707bff0a2d780e5bec9f560b180ad680",
+    "articleUrl": "https://blog.qiufengh.com/blog/",
+    "comments": []
+  }
+}
+```
+
+
+
+
 
 
 
@@ -265,181 +996,6 @@ https://blog.qiufengh.com/blog/
 ```
 
 
-
-
-
-
-
-## Learn Page
-
-
-
-### LearnUploadCard
-
-- 请求路径：/learn/uploadCard
-- 请求方法：post
-- 请求参数
-
-| 属性       | 值类型   | 备注       |
-| ---------- | -------- | ---------- |
-| title      | string   | 标题       |
-| articleUrl | string   | 文章路径   |
-| timeStamp  | number   | 创立时间戳 |
-| uploader   | 未定     | 上传者信息 |
-| aSelected  | number[] | 分类数组   |
-
-- 响应参数
-
-| 参数 | 参数类型 | 参数备注 |
-| ---- | -------- | -------- |
-| code |          |          |
-
-- 响应数据
-
-```json
-
-```
-
-
-
-
-
-
-
-### LearnAddReadVolume api
-
-- 请求路径：/learn/addReadVolume
-- 请求方法：post
-- 请求参数
-
-| 属性                | 值类型 | 备注                                                         |
-| ------------------- | ------ | ------------------------------------------------------------ |
-| dailyRead           | array  | 每日已阅读过的文章id                                         |
-| dailyRead.timeStamp | number | 每日第一次提交的时间戳(后端写入)，用于使得每人每天每篇文章阅读量只能加+1 |
-| sign                | string | 信息签名(确保信息不被篡改)                                   |
-| newRead             | array  | 新阅读文章id                                                 |
-
-- 请求数据
-
-```json
-{
- dailyRead:{
- 	oldRead: [
-        'dsewd',"ewsdsde"
-    ],
- 	timeStamp: 1578452885584
- },
- sign: 'dsiwjeijsosdsw',
- newRead: ["dsdwed"]
-}
-```
-
-- 响应参数
-
-| 属性      | 值类型   | 备注                                                         |
-| --------- | -------- | ------------------------------------------------------------ |
-| code      | nubmer   |                                                              |
-| dailyRead | string[] | 每日阅读过的文章id                                           |
-| timeStamp | string   | 每日第一次提交的时间戳(后端写入)，用于使得每人每天每篇文章阅读量只能加+1 |
-| sign      | string   | 新的信息签名                                                 |
-
-- 响应数据
-
-```json
-{
-  "code": 200,
-  "dailyRead": {
-    "oldRead": [
-      "41760e06ccea3781"
-    ],
-    "timeStamp": 1584259772101
-  },
-  "sign": "d6ce865673d1d8664d02c8e6572504ac1b2a62008c8ee8e056c7b8a6e394a9f3",
-  "resArr": [
-    {
-      "n": 1,
-      "nModified": 1,
-      "ok": 1
-    }
-  ]
-}
-```
-
-
-
-
-
-##  LearnContent page
-
-
-
-###  LearnGetContent api
-
-- 请求路径：/learn/getContent
-- 请求方法：post
-- 请求参数
-
-| 属性       | 值类型 | 备注                     |
-| ---------- | ------ | ------------------------ |
-| id         | string | 为文章url的md5加密字符串 |
-| articleUrl | string | id对应的文章url          |
-| comments   | Array  | 评论区对象 可选          |
-
-- 响应参数
-
-| 参数       | 参数类型 | 参数备注                 |
-| ---------- | -------- | ------------------------ |
-| id         | string   | 为文章url的md5加密字符串 |
-| articleUrl | string   | id对应的文章url          |
-| comments   | Array    | 评论区对象               |
-
-- 响应数据
-
-```json
-{
-  "code": 200,
-  "content": {
-    "id": "707bff0a2d780e5bec9f560b180ad680",
-    "articleUrl": "https://blog.qiufengh.com/blog/",
-    "comments": []
-  }
-}
-```
-
-
-
-###  learnUpdateContent api
-
-- 请求路径：/learn/updateContent
-- 请求方法：post
-- 请求参数
-
-| 属性       | 值类型 | 备注                     |
-| ---------- | ------ | ------------------------ |
-| id         | string | 为文章url的md5加密字符串 |
-| articleUrl | string | id对应的文章url          |
-| comments   | Array  | 评论区对象, 可选         |
-
-- 响应参数
-
-| 参数       | 参数类型 | 参数备注                 |
-| ---------- | -------- | ------------------------ |
-| id         | string   | 为文章url的md5加密字符串 |
-| articleUrl | string   | id对应的文章url          |
-| comments   | Array    | 评论区对象               |
-
-- 响应数据
-
-```json
-{
-  "code": 200,
-  "content": {
-    "id": "707bff0a2d780e5bec9f560b180ad680",
-    "articleUrl": "https://blog.qiufengh.com/blog/",
-    "comments": []
-  }
-}
-```
 
 
 

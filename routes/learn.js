@@ -7,7 +7,8 @@ const {
 	learnNavData,
 	learnCards,
 	learnRotationUrl,
-	learnContent
+	learnContent,
+	users
 } = require('../model')
 
 
@@ -239,13 +240,14 @@ router.post('/getCards', async(ctx) => {
 			let query = {
 				label_0: aSelected[0], 
 				label_1: aSelected[1],
-				label_2: aSelected[2]
+				label_2: aSelected[2],
+				show: true
 			}
 			// 默认按时间降序，新的优先
 			let cards =  await learnCards.find(query).sort({timeStamp: -1}).select({_id: 0})      
 			ctx.body = {
 				code: 200,
-				aSelected,
+				// aSelected,
 				cards
 			}
 		} else {
@@ -263,12 +265,23 @@ router.post('/getCards', async(ctx) => {
 })
 
 router.post('/uploadCard', async (ctx) => {
+	if(!isLogin(ctx)) {
+		ctx.body = {
+			code: -1,
+			msg: '未登录'
+		}
+		return ''
+	}
+	const userId = ctx.cookies.get('userId')
+	const userRes = await users.findOne({userId}).select({name: 1})
 	let body = ctx.request.body
 	const aSelected = JSON.parse(body.aSelected)
 	try {
 		let card = {
 			title : body.title,
-			uploader : '暂放',  //TODO: 应涉及用户对象
+			uploader : {
+				name: userRes.name
+			},  //TODO: 应涉及用户对象
 			articleUrl: body.articleUrl,
 			isAllowedFrame: await isAllowedFrame(body.articleUrl),
 			id: compress(body.articleUrl),  // 以加密后的文章url加唯一标志
@@ -277,7 +290,8 @@ router.post('/uploadCard', async (ctx) => {
 			imgUrl: await uploadFile(ctx.request.files.file, 'images'),
 			label_0: aSelected[0],
 			label_1: aSelected[1],
-			label_2: aSelected[2]
+			label_2: aSelected[2],
+			show: true
 		}
 		let res = await learnCards.update({id: card.id}, card, {upsert: true})
 		const content  = {
