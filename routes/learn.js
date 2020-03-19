@@ -247,7 +247,7 @@ router.post('/getCards', async(ctx) => {
 			let cards =  await learnCards.find(query).sort({timeStamp: -1}).select({_id: 0})      
 			ctx.body = {
 				code: 200,
-				aSelected,
+				// aSelected,
 				cards
 			}
 		} else {
@@ -270,10 +270,10 @@ router.post('/uploadCard', async (ctx) => {
 			code: -1,
 			msg: '未登录'
 		}
+		return ''
 	}
 	const userId = ctx.cookies.get('userId')
 	const userRes = await users.findOne({userId}).select({name: 1})
-	console.log(userRes)
 	let body = ctx.request.body
 	const aSelected = JSON.parse(body.aSelected)
 	try {

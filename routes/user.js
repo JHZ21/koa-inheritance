@@ -1,5 +1,5 @@
 const router = require('koa-router')()
-const {validAccount, ceateUserId, compress, crypto16, isLogin }  =require('../utils/index')
+const {validAccount, ceateId, compress, crypto16, isLogin }  =require('../utils/index')
 
 const {
 	users
@@ -27,7 +27,7 @@ router.post('/register', async (ctx) => {
 				}
 			} else {
 				let user = {
-					userId: ceateUserId(),
+					userId: ceateId(),
 					account: body.account,
 					name: `用户${ (''+body.account).slice(-4)}`,
 					pw: compress(body.pw),
@@ -66,8 +66,8 @@ router.post('/login', async (ctx) => {
 				pwEqual = compress(body.pw) === res[0].pw
 			}
 			if(pwEqual) {
-				const userRes= await users.find({account: body.account}).select(userInfoSelect)
-				const userInfo = userRes[0]
+				const userRes= await users.findOne({account: body.account}).select(userInfoSelect)
+				const userInfo = userRes
 				ctx.cookies.set(
 					'userId', userInfo.userId,
 					{

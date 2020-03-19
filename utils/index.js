@@ -46,7 +46,7 @@ const crypto16 = (obj) => {
 	sign.update(JSON.stringify(obj))
 	return sign.digest('hex').slice(0, 16) // 返回格式64位的首部16位
 }
-const ceateUserId = () => {
+const ceateId = () => {
 	//(注册时间戳字符穿+4位随机数)压缩为16位
 	const timeStr = '' + new Date().getTime() + Math.floor(Math.random() * 1e4)
 	return compress(timeStr)
@@ -91,9 +91,12 @@ const uploadFile =  (file, dir) => {
 			console.log('创建失败')
 		})
 	}
-	// 创建写入流
-	const upStream = fs.createWriteStream(newFilePath)
-	reader.pipe(upStream)
+	if(!fs.existsSync(newFilePath)) {
+		// 文件不存在
+		// 创建写入流
+		const upStream = fs.createWriteStream(newFilePath)
+		reader.pipe(upStream)
+	}
 	return `${dir}/${newFileName}`
 }
 
@@ -103,7 +106,7 @@ module.exports = {
 	nextDayTime,
 	crypto16,
 	isLogin,
-	ceateUserId,
+	ceateId,
 	validAccount,
 	isAllowedFrame,
 	compress,
