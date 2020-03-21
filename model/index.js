@@ -15,6 +15,10 @@ const learnContent = mongoose.model('learnContent', learn.contentSchema, 'learnC
 // compet
 const competNavData = mongoose.model('competNavData',compet.navDataSchema, 'competNavData' )
 const competProjects = mongoose.model('competProjects', compet.projectsSchema, 'competProjects')
+// project
+const projectContent = mongoose.model('projectContent', compet.projectContentSchema, 'projectContent')
+const projectTeam = mongoose.model('projectTeam', compet.projectTeamSchema, 'projectTeam')
+const projectSteps = mongoose.model('projectSteps', compet.projectStepsSchema, 'projectSteps')
 
 module.exports = {
 	users,
@@ -23,5 +27,8 @@ module.exports = {
 	learnRotationUrl,
 	learnContent,
 	competNavData,
-	competProjects
+	competProjects,
+	projectContent,
+	projectTeam,
+	projectSteps
 }

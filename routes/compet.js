@@ -1,5 +1,6 @@
 const router = require('koa-router')()
 const Tool =require('../utils/index')
+const Pj = require('../utils/project')
 
 router.prefix('/compet')
 
@@ -19,9 +20,7 @@ router.post('/uploadProject', async (ctx) => {
 		return ''
 	}
 	const userId = ctx.cookies.get('userId')
-	console.log('userId: ', userId)
 	const uploaderInfo = await users.findOne({userId}).select({userId: 1, name: 1, _id: 0})
-	console.log('uploaderInfo: ', uploaderInfo)
 	const body = ctx.request.body
 	let aSelected = body.aSelected
 	let { PName, PSummary, TName, TMembers} = body
@@ -39,11 +38,10 @@ router.post('/uploadProject', async (ctx) => {
 	// 添加上传者于首位
 	TMembers.unshift(uploaderInfo)
 	let file = ctx.request.files.file
-	console.log('file: ', file)
 	try {
     
 		const project = {
-			id: Tool.ceateId(),
+			PId: Tool.ceateId(),
 			PName,
 			PSummary,
 			TName,
@@ -53,7 +51,6 @@ router.post('/uploadProject', async (ctx) => {
 			label_1: aSelected[1],
 			show: true
 		}
-		console.log('updateOne')
 		const res = await competProjects.updateOne({id: project.id}, project, {upsert: true})
 		console.log('res: ', res)
 		ctx.body = {
@@ -115,5 +112,9 @@ router.get('/getNavData', async(ctx) => {
 		}
 	}
 })
+
+// router.post()
+
+Pj.getProject('128320832')
 
 module.exports = router
