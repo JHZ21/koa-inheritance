@@ -4,15 +4,187 @@
 
 
 
+## ProjectContent doc
+
+> 项目内容块，包含有项目介绍等
+
+* schema
+
+| 属性    | 值类型   | 备注                            |
+| ------- | -------- | ------------------------------- |
+| PId     | string   | 项目id,随机 16位,  属于哪个项目 |
+| index   | number   | 排序顺序                        |
+| title   | string   | 模块名                          |
+| content | string[] | 具体内容                        |
+| show    | boolean  | 是否展示                        |
+
+* example
+
+```
+{
+    title: "项目简介",
+    PId: "128320832",
+    index: 0,
+    content: [
+      "如题目所示，有一个数组 使用 v-for 循环遍历这个数组，进行渲染展示，当用户点击删除按钮的时候应对应的删除 相应的数组元素并且更新 dom",
+      "的Joe我都是摸底哦欸哦莫i恶魔"
+    ],
+    show: true
+},
+   {
+        title: "技术栈",
+        pId: "128320832",
+    index: 1,
+        content: ["Vue", "Vue-router"],
+        show: true
+      }
+```
+
+
+
+
+## ProjectTeam doc
+
+> 项目队伍
+
+* schema
+
+| 属性         | 值类型   | 备注                            |
+| ------------ | -------- | ------------------------------- |
+| PId          | string   | 项目id,随机 16位,  属于哪个项目 |
+| userId       | string   | 用户id                          |
+| index        | number   | 排序顺序                        |
+| ! headUrl    | string   | 头像路径， 从user 取headUrl     |
+| introduce    | string[] | 介绍内容                        |
+| contribution | string[] | 贡献内容                        |
+| show         | boolean  | 是否展示                        |
+
+
+
+* example
+
+	
+	        {
+	      	  PId: "128320832",
+	          userId: "7354d9ca7a0b13cd",
+	          index: 0,
+	          introduce: [
+	            "江小白",
+	            "2017级",
+	            "Web前端攻城狮",
+	            "熟悉Vue全家桶",
+	            "熟悉SCSS",
+	            "Web前端攻城狮",
+	            "熟悉Vue全家桶",
+	            "熟悉SCSS",
+	            "Web前端攻城狮",
+	            "熟悉Vue全家桶",
+	            "熟悉SCSS"
+	          ],
+	          contribution: [
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法"
+	          ],
+	          show: true
+	        },
+	        {
+	          PId: "128320832",
+	          userId: "05cd81ade1213f3f",
+	          index: 1,
+	          introduce: [
+	            "江小白",
+	            "2017级",
+	            "Web前端攻城狮",
+	            "熟悉Vue全家桶",
+	            "熟悉SCSS"
+	          ],
+	          contribution: [
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+	            "打法的非法，阿飞，啊额，嗯阿发发的，大非法"
+	          ],
+	           show: true
+	        },
+	
+
+
+
+## ProjectSteps doc
+
+> 项目规划
+
+* schema
+
+| 属性      | 值类型   | 备注                            |
+| --------- | -------- | ------------------------------- |
+| PId       | string   | 项目id,随机 16位,  属于哪个项目 |
+| index     | number   | 排序顺序                        |
+| pleanId   | string   | 规划的id                        |
+| planName  | string   | 规划名                          |
+| master    | object   | 创建者信息userId                |
+| stepsData | object[] | 具体规划步骤                    |
+| activeNum | number   | 完成了步骤数                    |
+| show      | boolean  | 是否展示                        |
+
+* stepsData schema
+
+| 属性        | 值类型 | 备注     |
+| ----------- | ------ | -------- |
+| deadline    | string | 截止时间 |
+| description | string | 阶段描述 |
+|             |        |          |
+
+
+
+* example
+
+```js
+   {
+       	PId: "128320832",
+        planName: "前端",
+        stepsData: [ {
+      deadline: "2-21-2020",
+      description:
+        "这是一段很长很长很长的描述性文字。这是一段很长很长很长的描述性文字。"
+    }],
+        activeNum: 2,
+        id: "3810238",
+        master: {
+            userId: '7354d9ca7a0b13cd'
+        }
+      }
+
+```
+
+
+
+
+
+
+
 ## CompetProjects doc
 
 > 竞赛导航数据
+>
+> 
+
+
 
 * schema
 
 | 属性     | 值类型   | 备注             |
 | -------- | -------- | ---------------- |
-| id       | string   | 项目id,随机 16位 |
+| PId      | string   | 项目id,随机 16位 |
 | PName    | string   | 项目名           |
 | PSummary | string   | 项目介绍         |
 | TName    | string   | 队名             |
@@ -43,6 +215,122 @@
     "show" : true
 }
 ```
+
+* data
+
+```js
+{
+	project_name: "大二房价将藕带",
+	content_items: [
+      {
+        title: "项目简介",
+        content: [
+          "如题目所示，有一个数组 使用 v-for 循环遍历这个数组，进行渲染展示，当用户点击删除按钮的时候应对应的删除 相应的数组元素并且更新 dom",
+          "的Joe我都是摸底哦欸哦莫i恶魔"
+        ]
+      },
+      {
+        title: "技术栈",
+        content: ["Vue", "Vue-router"]
+      }
+    ],
+    team: {
+      team_name: "的Jodi哦",
+      members: [
+        {
+          id: "a0",
+          portrait: require("@/assets/images/header_avator.gif"),
+          introduce: [
+            "江小白",
+            "2017级",
+            "Web前端攻城狮",
+            "熟悉Vue全家桶",
+            "熟悉SCSS",
+            "Web前端攻城狮",
+            "熟悉Vue全家桶",
+            "熟悉SCSS",
+            "Web前端攻城狮",
+            "熟悉Vue全家桶",
+            "熟悉SCSS"
+          ],
+          contribution: [
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法"
+          ]
+        },
+        {
+          id: "a1",
+          portrait: require("@/assets/images/header_avator.gif"),
+          introduce: [
+            "江小白",
+            "2017级",
+            "Web前端攻城狮",
+            "熟悉Vue全家桶",
+            "熟悉SCSS"
+          ],
+          contribution: [
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法"
+          ]
+        },
+        {
+          id: "a2",
+          portrait: require("@/assets/images/header_avator.gif"),
+          introduce: [
+            "江小白",
+            "2017级",
+            "Web前端攻城狮",
+            "熟悉Vue全家桶",
+            "熟悉SCSS"
+          ],
+          contribution: [
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法",
+            "打法的非法，阿飞，啊额，嗯阿发发的，大非法"
+          ]
+        }
+      ]
+    },
+   steps_objs:[
+      {
+        plan_name: "前端",
+        power: false,
+        steps_data: [ {
+      deadline: "2-21-2020",
+      description:
+        "这是一段很长很长很长的描述性文字。这是一段很长很长很长的描述性文字。"
+    }],
+        activeNum: 2,
+        id: "3810238",
+        master: "a0"
+      },
+      {
+        plan_name: "后端",
+        power: false,
+        steps_data: [ {
+      deadline: "2-21-2020",
+      description:
+        "这是一段很长很长很长的描述性文字。这是一段很长很长很长的描述性文字。"
+    }],
+        activeNum: 3,
+        id: "329dje3",
+        master: "a1"
+      }
+    ] 
+}
+```
+
+
 
 
 
@@ -391,7 +679,45 @@ pw: 1111
 
 
 
-### CompetUploadProject api
+### getProject api
+
+- 请求路径：/compet/getProject
+- 请求方法：post
+- 请求参数
+
+| 属性 | 值类型 | 备注        |
+| ---- | ------ | ----------- |
+| pId  | number | 项目id,随机 |
+
+> 初步，允许所有人访问，公开原则
+>
+> 功能升级时，
+>
+> uploader 的userId ，随cookie发送到后端，
+>
+> 而且有userIdSign, 发送者信息不易伪造，更安全
+
+
+
+- 响应参数
+
+| 参数 | 参数类型 | 参数备注 |
+| ---- | -------- | -------- |
+| code |          |          |
+
+- 响应数据
+
+```json
+
+```
+
+
+
+
+
+
+
+### uploadProject api
 
 - 请求路径：/compet/uploadProject
 - 请求方法：post
@@ -399,7 +725,7 @@ pw: 1111
 
 | 属性      | 值类型   | 备注                 |
 | --------- | -------- | -------------------- |
-| id        | number   | 项目id,随机          |
+| pId       | number   | 项目id,随机          |
 | PName     | string   | 项目名               |
 | PSummary  | string   | 项目介绍             |
 | TName     | string   | 队名                 |
@@ -434,9 +760,9 @@ pw: 1111
 
 
 
-### CompetProjects api
+### getProjectCards api
 
-- 请求路径：/compet/getProjects
+- 请求路径：/compet/getProjectCards
 - 请求方法：post
 - 请求参数
 
@@ -446,10 +772,10 @@ pw: 1111
 
 - 响应参数
 
-| 参数  | 参数类型 | 参数备注     |
-| ----- | -------- | ------------ |
-| code  |          |              |
-| cards | object[] | 项目卡片数组 |
+| 参数         | 参数类型 | 参数备注     |
+| ------------ | -------- | ------------ |
+| code         |          |              |
+| projectCards | object[] | 项目卡片数组 |
 
 - 响应数据
 
@@ -468,7 +794,7 @@ pw: 1111
 
 
 
-### CompetNavData api
+### getNavData api
 
 - 请求路径：/compet/getNavData
 - 请求方法：get
