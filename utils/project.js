@@ -37,8 +37,8 @@ const getPjTeam = async (PId) => {
 const getPjSteps = async (PId) => {
 	console.log('getPjSteps')
 	try {
-		const steps = await projectSteps.find({PId, show: true}).select({_id: 0, show: 0}).sort({index: 1})
-		return steps
+		const stepsList = await projectSteps.find({PId, show: true}).select({_id: 0, show: 0}).sort({index: 1})
+		return stepsList
 	} catch(err) {
 		console.log('err: ', err)
 	}
@@ -47,7 +47,7 @@ const getPjSteps = async (PId) => {
 const getProject = async (PId) => {
 	console.log('getProject')
 	try {
-		const [content, team, steps] = await Promise.all([
+		const [content, team, stepsList] = await Promise.all([
 			getPjContent(PId),
 			getPjTeam(PId),
 			getPjSteps(PId)
@@ -55,9 +55,9 @@ const getProject = async (PId) => {
 		const project = {
 			content,
 			team,
-			steps
+			stepsList
 		}
-		console.log('project: ', project)
+		// console.log('project: ', project)
 		return project
 	} catch(err) {
 		console.log('err: ', err)

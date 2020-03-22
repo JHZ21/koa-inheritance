@@ -47,11 +47,12 @@ router.post('/uploadProject', async (ctx) => {
 			TName,
 			TMembers,
 			imgUrl: await Tool.uploadFile(ctx.request.files.file, 'images'),
+			timeStamp: + body.timeStamp || + new Date(),
 			label_0: aSelected[0],
 			label_1: aSelected[1],
 			show: true
 		}
-		const res = await competProjects.updateOne({id: project.id}, project, {upsert: true})
+		const res = await competProjects.updateOne({PId: project.PId}, project, {upsert: true})
 		console.log('res: ', res)
 		ctx.body = {
 			code: 200,
@@ -69,7 +70,7 @@ router.post('/uploadProject', async (ctx) => {
 	}
 })
 
-router.post('/getProjects', async(ctx) => {
+router.post('/getProjectCards', async(ctx) => {
 	let aSelected= ctx.request.body.aSelected
 	try {
 		if(aSelected && aSelected.length >=2) {
@@ -79,10 +80,10 @@ router.post('/getProjects', async(ctx) => {
 				show: true
 			}
 			// 默认按时间降序，新的优先
-			let projects = await competProjects.find(query).sort({timeStamp: -1}).select({_id: 0})
+			let projectCards = await competProjects.find(query).sort({timeStamp: -1}).select({_id: 0})
 			ctx.body = {
 				code: 200,
-				cards: projects || []
+				projectCards: projectCards || []
 			}
 		} else {
 			ctx.body ={
@@ -113,8 +114,31 @@ router.get('/getNavData', async(ctx) => {
 	}
 })
 
-// router.post()
+router.post('/getProject', async(ctx) => {
+	try {
+		const body = ctx.request.body
+		const PId = body.PId
+		const [common, specific] = await Promise.all([
+			competProjects.findOne({PId, show: true}).select({_id:0, PName: 1, TName: 1}),
+			Pj.getProject(PId)
+		])
+		const project = {
+			...specific,
+			PName: common.PName,
+			TName: common.TName
+		}
+		ctx.body = {
+			code: 200,
+			project
+		}
+	} catch(err) {
+		ctx.body = {
+			code: -1,
+			err
+		}
+	}
+})
 
-Pj.getProject('128320832')
+// Pj.getProject('128320832')
 
 module.exports = router

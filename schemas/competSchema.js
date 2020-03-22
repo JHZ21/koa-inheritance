@@ -14,6 +14,7 @@ const projectsSchema = new Schema({
 	TName: String,
 	TMembers: Array,
 	imgUrl: String,
+	timeStamp: Number,
 	label_0: Number,
 	label_1: Number,
 	show: Boolean

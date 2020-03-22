@@ -175,6 +175,10 @@
 ## CompetProjects doc
 
 > 竞赛导航数据
+>
+> 
+
+
 
 * schema
 
@@ -675,7 +679,45 @@ pw: 1111
 
 
 
-### CompetUploadProject api
+### getProject api
+
+- 请求路径：/compet/getProject
+- 请求方法：post
+- 请求参数
+
+| 属性 | 值类型 | 备注        |
+| ---- | ------ | ----------- |
+| pId  | number | 项目id,随机 |
+
+> 初步，允许所有人访问，公开原则
+>
+> 功能升级时，
+>
+> uploader 的userId ，随cookie发送到后端，
+>
+> 而且有userIdSign, 发送者信息不易伪造，更安全
+
+
+
+- 响应参数
+
+| 参数 | 参数类型 | 参数备注 |
+| ---- | -------- | -------- |
+| code |          |          |
+
+- 响应数据
+
+```json
+
+```
+
+
+
+
+
+
+
+### uploadProject api
 
 - 请求路径：/compet/uploadProject
 - 请求方法：post
@@ -718,9 +760,9 @@ pw: 1111
 
 
 
-### CompetProjects api
+### getProjectCards api
 
-- 请求路径：/compet/getProjects
+- 请求路径：/compet/getProjectCards
 - 请求方法：post
 - 请求参数
 
@@ -730,10 +772,10 @@ pw: 1111
 
 - 响应参数
 
-| 参数  | 参数类型 | 参数备注     |
-| ----- | -------- | ------------ |
-| code  |          |              |
-| cards | object[] | 项目卡片数组 |
+| 参数         | 参数类型 | 参数备注     |
+| ------------ | -------- | ------------ |
+| code         |          |              |
+| projectCards | object[] | 项目卡片数组 |
 
 - 响应数据
 
@@ -752,7 +794,7 @@ pw: 1111
 
 
 
-### CompetNavData api
+### getNavData api
 
 - 请求路径：/compet/getNavData
 - 请求方法：get
