@@ -49,15 +49,15 @@
 
 * schema
 
-| 属性         | 值类型   | 备注                            |
-| ------------ | -------- | ------------------------------- |
-| PId          | string   | 项目id,随机 16位,  属于哪个项目 |
-| userId       | string   | 用户id                          |
-| index        | number   | 排序顺序                        |
-| ! headUrl    | string   | 头像路径， 从user 取headUrl     |
-| introduce    | string[] | 介绍内容                        |
-| contribution | string[] | 贡献内容                        |
-| show         | boolean  | 是否展示                        |
+| 属性         | 值类型   | 备注                                |
+| ------------ | -------- | ----------------------------------- |
+| PId          | string   | 项目id,随机 16位,  属于哪个项目     |
+| userId       | string   | 用户id                              |
+| index        | number   | 排序顺序                            |
+| ! headUrl    | string   | 不用存，头像路径， 从user 取headUrl |
+| introduce    | string[] | 介绍内容                            |
+| contribution | string[] | 贡献内容                            |
+| show         | boolean  | 是否展示                            |
 
 
 

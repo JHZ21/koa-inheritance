@@ -7,6 +7,24 @@ const {
 	projectSteps
 } = require('../model')
 
+async function updatePjContent(content)  {
+	console.log('updatePContentSummary')
+	if(!(content.PId && typeof(content.index) === 'number' && content.title && content.content)) {
+		console.log('content 属性不全', content)
+		return false
+	}
+	if(content.show === undefined) {
+		content.show = true
+	}
+	try {
+		const res = await projectContent.updateOne({PId: content.PId, index: content.index}, content, {upsert: true})
+		return res
+	} catch(err) {
+		console.log('err: ',err)
+		return false
+	}
+}
+
 const getPjContent = async (PId) => {
 	console.log('getPjContent')
 	try {
@@ -15,6 +33,28 @@ const getPjContent = async (PId) => {
 		return content
 	} catch(err) {
 		console.log('err: ', err)
+	}
+}
+async function updatePjMember(member) {
+	console.log('updatePjMember ')
+	if(!(member.PId 
+    &&member.userId 
+    &&typeof(member.index) === 'number' 
+    && member.introduce 
+    && member.contribution
+	)) {
+		console.log('member 属性不全', member)
+		return false
+	}
+	if(member.show === undefined) {
+		member.show = true
+	}
+	try {
+		const res = await projectTeam.updateOne({PId: member.PId, index: member.index}, member, {upsert: true})
+		return res
+	} catch(err) {
+		console.log('err: ',err)
+		return false
 	}
 }
 const getPjTeam = async (PId) => {
@@ -67,5 +107,7 @@ module.exports = {
 	getPjContent,
 	getPjTeam,
 	getPjSteps,
-	getProject
+	getProject,
+	updatePjContent,
+	updatePjMember
 }

@@ -39,7 +39,6 @@ router.post('/uploadProject', async (ctx) => {
 	TMembers.unshift(uploaderInfo)
 	let file = ctx.request.files.file
 	try {
-    
 		const project = {
 			PId: Tool.ceateId(),
 			PName,
@@ -52,15 +51,39 @@ router.post('/uploadProject', async (ctx) => {
 			label_1: aSelected[1],
 			show: true
 		}
-		const res = await competProjects.updateOne({PId: project.PId}, project, {upsert: true})
-		console.log('res: ', res)
+		const contentSum = {
+			PId: project.PId,
+			index: 0,
+			title: '项目简介',
+			content: project.PSummary,
+			show: true
+		}
+		const teamLeader = {
+			PId: project.PId,
+			userId: uploaderInfo.userId,
+			index: 0,
+			introduce: [uploaderInfo.name],
+			contribution: [],
+			show: true
+		}
+		const [projectRes, contentRes, memberRes] = await Promise.all([
+			competProjects.updateOne({PId: project.PId}, project, {upsert: true}),
+			Pj.updatePjContent(contentSum),
+			Pj.updatePjMember(teamLeader)
+		])
+   
+		console.log('projectRes: ', projectRes)
+		console.log('contentRes: ', contentRes)
+		console.log('memberRes: ', memberRes)
+    
 		ctx.body = {
 			code: 200,
 			project,
 			body,
-			res
+			projectRes,
+			contentRes,
+			memberRes
 		}
-
 	} catch(err) {
 		ctx.body = {
 			code: -1,
