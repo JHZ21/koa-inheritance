@@ -10,6 +10,38 @@ const {
 	competProjects,
 } = require('../model')
 
+router.post('/updatePjContents', async (ctx) =>{
+	try {
+		if(!Tool.isLogin(ctx)) {
+			ctx.body = {
+				code: -1,
+				msg: '未登录'
+			}
+			return ''
+		}
+		const userId = ctx.cookies.get('userId')
+		const { body } = ctx.request
+		const { contents } = body
+		if(!Pj.isValidUpdateContentRequest(userId, contents)) {
+			ctx.body = {
+				code: -1,
+				msg: 'request is invalid'
+			}
+		} else {
+			const [...res] = await Promise.all(contents.map(Pj.updatePjContent))
+			ctx.body = {
+				code: 200,
+				res
+			}
+		}
+	} catch (err) {
+		ctx.body = {
+			code: -1,
+			err
+		}
+	}
+})
+
 router.post('/uploadProject', async (ctx) => {
 	console.log('uploadProject')
 	if(!Tool.isLogin(ctx)) {
@@ -39,7 +71,6 @@ router.post('/uploadProject', async (ctx) => {
 	TMembers.unshift(uploaderInfo)
 	let file = ctx.request.files.file
 	try {
-    
 		const project = {
 			PId: Tool.ceateId(),
 			PName,
@@ -52,15 +83,39 @@ router.post('/uploadProject', async (ctx) => {
 			label_1: aSelected[1],
 			show: true
 		}
-		const res = await competProjects.updateOne({PId: project.PId}, project, {upsert: true})
-		console.log('res: ', res)
+		const contentSum = {
+			PId: project.PId,
+			index: 0,
+			title: '项目简介',
+			content: project.PSummary,
+			show: true
+		}
+		const teamLeader = {
+			PId: project.PId,
+			userId: uploaderInfo.userId,
+			index: 0,
+			introduce: [uploaderInfo.name],
+			contribution: [],
+			show: true
+		}
+		const [projectRes, contentRes, memberRes] = await Promise.all([
+			competProjects.updateOne({PId: project.PId}, project, {upsert: true}),
+			Pj.updatePjContent(contentSum),
+			Pj.updatePjMember(teamLeader)
+		])
+   
+		console.log('projectRes: ', projectRes)
+		console.log('contentRes: ', contentRes)
+		console.log('memberRes: ', memberRes)
+    
 		ctx.body = {
 			code: 200,
 			project,
 			body,
-			res
+			projectRes,
+			contentRes,
+			memberRes
 		}
-
 	} catch(err) {
 		ctx.body = {
 			code: -1,

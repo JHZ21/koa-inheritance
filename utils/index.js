@@ -5,6 +5,13 @@ const axios = require('axios')
 const crypto = require('crypto')
 
 
+function isDef(data) {
+	return data !== undefined && data !== null
+}
+
+function isUndef(data) {
+	return !isDef(data)
+}
 
 
 const nextDayTime = (time) => {
@@ -102,6 +109,8 @@ const uploadFile =  (file, dir) => {
 
 
 module.exports = {
+	isDef,
+	isUndef,
 	isBeforeDay,
 	nextDayTime,
 	crypto16,

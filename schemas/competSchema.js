@@ -23,6 +23,7 @@ const projectsSchema = new Schema({
 const projectContentSchema = new Schema({
 	PId: String,
 	index: Number,
+	time: Number,
 	title: String,
 	content: Array,
 	show: Boolean
