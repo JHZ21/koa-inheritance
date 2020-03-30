@@ -14,6 +14,7 @@
 | ------- | -------- | ------------------------------- |
 | PId     | string   | 项目id,随机 16位,  属于哪个项目 |
 | index   | number   | 排序顺序                        |
+| time    | number   | 时间戳                          |
 | title   | string   | 模块名                          |
 | content | string[] | 具体内容                        |
 | show    | boolean  | 是否展示                        |
@@ -679,6 +680,39 @@ pw: 1111
 
 
 
+### updatePjContents api
+
+- 请求路径：/compet/updatePjContents
+- 请求方法：post
+- 请求参数
+
+| 属性            | 值类型   | 备注     |
+| --------------- | -------- | -------- |
+| contents        | object[] | 内容数组 |
+| deletedContents | object[] |          |
+
+> uploader 的userId ，随cookie发送到后端，
+>
+> 而且有userIdSign, 发送者信息不易伪造，更安全
+
+
+
+- 响应参数
+
+| 参数 | 参数类型 | 参数备注 |
+| ---- | -------- | -------- |
+| code |          |          |
+
+- 响应数据
+
+```json
+
+```
+
+
+
+
+
 ### getProject api
 
 - 请求路径：/compet/getProject
@@ -701,9 +735,22 @@ pw: 1111
 
 - 响应参数
 
-| 参数 | 参数类型 | 参数备注 |
-| ---- | -------- | -------- |
-| code |          |          |
+| 参数    | 参数类型 | 参数备注 |
+| ------- | -------- | -------- |
+| code    | number   |          |
+| project | object   |          |
+
+* project 参数 schema
+
+| 参数      | 参数类型 | 参数备注   |
+| --------- | -------- | ---------- |
+| PName     | string   | 项目名字   |
+| TName     | string   | 团队名字   |
+| contents  | object[] | 项目内容们 |
+| team      | object[] | 队员信息   |
+| stepsList | object[] | 规划表们   |
+
+
 
 - 响应数据
 

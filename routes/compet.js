@@ -10,6 +10,38 @@ const {
 	competProjects,
 } = require('../model')
 
+router.post('/updatePjContents', async (ctx) =>{
+	try {
+		if(!Tool.isLogin(ctx)) {
+			ctx.body = {
+				code: -1,
+				msg: '未登录'
+			}
+			return ''
+		}
+		const userId = ctx.cookies.get('userId')
+		const { body } = ctx.request
+		const { contents } = body
+		if(!Pj.isValidUpdateContentRequest(userId, contents)) {
+			ctx.body = {
+				code: -1,
+				msg: 'request is invalid'
+			}
+		} else {
+			const [...res] = await Promise.all(contents.map(Pj.updatePjContent))
+			ctx.body = {
+				code: 200,
+				res
+			}
+		}
+	} catch (err) {
+		ctx.body = {
+			code: -1,
+			err
+		}
+	}
+})
+
 router.post('/uploadProject', async (ctx) => {
 	console.log('uploadProject')
 	if(!Tool.isLogin(ctx)) {
