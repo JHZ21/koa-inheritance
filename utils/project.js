@@ -12,6 +12,10 @@ async function isValidUpdateContentRequest(userId, contents) {
 	return true
 }
 
+async function isValidUpdatePNameRequest(PId, userId) {
+	return true
+}
+// TODO: 删除的直接删除，先让数据库清晰
 async function updatePjContent(content)  {
 	console.log('updatePContentSummary')
 	if(!(content.PId && typeof(content.index) === 'number' && content.title && content.content)) {
@@ -120,5 +124,6 @@ module.exports = {
 	getProject,
 	updatePjMember,
 	updatePjContent,
-	isValidUpdateContentRequest
+	isValidUpdateContentRequest,
+	isValidUpdatePNameRequest
 }

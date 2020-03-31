@@ -10,6 +10,58 @@ const {
 	competProjects,
 } = require('../model')
 
+async function updatePSummaryByContent(item) {
+	if(Tool.isUndef(item) 
+  || Tool.isUndef(item.PId) 
+  || item.index !==0){ 
+		return false
+	}
+	const {PId, content} = item
+	let PSummary = ''
+	if(Array.isArray(content)) {
+		PSummary = content.join('\n')
+	} else {
+		PSummary = content
+	}
+	return competProjects.updateOne({PId}, {$set: {PSummary}})
+}
+
+async function updatePName({PId, PName}) {
+	if(!PId || !PName) return
+	return competProjects.updateOne({PId}, {$set: {PName}})
+}
+
+router.post('/updatePName', async (ctx) => {
+	try {
+		if(!Tool.isLogin(ctx)) {
+			ctx.body = {
+				code: -1,
+				msg: '未登录'
+			}
+			return ''
+		}
+		const userId = ctx.cookies.get('userId')
+		const { PId, PName } = ctx.request.body
+		if(!Pj.isValidUpdatePNameRequest(PId, userId)) {
+			ctx.body = {
+				code: -1,
+				msg: 'request is invalid'
+			}
+		} else {
+			const res = await updatePName({PId, PName})
+			ctx.body = {
+				code: 200,
+				res,
+			}
+		}
+	} catch (err) {
+		ctx.body = {
+			code: -1,
+			err
+		}
+	}
+})
+
 router.post('/updatePjContents', async (ctx) =>{
 	try {
 		if(!Tool.isLogin(ctx)) {
@@ -29,9 +81,11 @@ router.post('/updatePjContents', async (ctx) =>{
 			}
 		} else {
 			const [...res] = await Promise.all(contents.map(Pj.updatePjContent))
+			const PSummaryRes = await updatePSummaryByContent(contents[0])
 			ctx.body = {
 				code: 200,
-				res
+				res,
+				PSummaryRes
 			}
 		}
 	} catch (err) {

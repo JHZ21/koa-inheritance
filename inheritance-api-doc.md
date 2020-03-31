@@ -680,11 +680,44 @@ pw: 1111
 
 
 
+### updatePName api
+
+- 请求路径：/compet/updatePName 
+- 请求方法：post
+- 请求参数
+
+| 属性  | 值类型 | 备注   |
+| ----- | ------ | ------ |
+| PId   | string | 项目id |
+| PName | string | 项目名 |
+
+> uploader 的userId ，随cookie发送到后端，
+>
+> 而且有userIdSign, 发送者信息不易伪造，更安全
+
+
+
+- 响应参数
+
+| 参数 | 参数类型 | 参数备注 |
+| ---- | -------- | -------- |
+| code |          |          |
+
+- 响应数据
+
+```json
+
+```
+
+
+
+
+
 ### updatePjContents api
 
 - 请求路径：/compet/updatePjContents
 - 请求方法：post
-- 请求参数
+- 请求参数？？
 
 | 属性            | 值类型   | 备注     |
 | --------------- | -------- | -------- |
