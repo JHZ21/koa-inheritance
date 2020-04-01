@@ -15,6 +15,16 @@ async function isValidUpdateContentRequest(userId, contents) {
 async function isValidUpdatePNameRequest(PId, userId) {
 	return true
 }
+
+async function isValidUpdateTeamRequest(PId, userId, me, leaderPower) {
+	return true
+}
+
+async function deletePjContents(query) {
+	if(Tool.isUndef(query) || Tool.isUndef(query.PId)) return false
+	return  projectContent.deleteMany(query)
+}
+
 // TODO: 删除的直接删除，先让数据库清晰
 async function updatePjContent(content)  {
 	console.log('updatePContentSummary')
@@ -51,11 +61,12 @@ async function getPjContent (PId) {
 }
 async function updatePjMember(member) {
 	console.log('updatePjMember ')
-	if(!(member.PId 
-    &&member.userId 
-    &&typeof(member.index) === 'number' 
-    && member.introduce 
-    && member.contribution
+	const {PId, userId, index, introduce, contribution} = member
+	if(!(PId 
+    &&userId 
+    &&typeof(index) === 'number' 
+    && introduce 
+    && contribution
 	)) {
 		console.log('member 属性不全', member)
 		return false
@@ -64,7 +75,7 @@ async function updatePjMember(member) {
 		member.show = true
 	}
 	try {
-		const res = await projectTeam.updateOne({PId: member.PId, index: member.index}, member, {upsert: true})
+		const res = await projectTeam.updateOne({PId, userId}, member, {upsert: true})
 		return res
 	} catch(err) {
 		console.log('err: ',err)
@@ -125,5 +136,7 @@ module.exports = {
 	updatePjMember,
 	updatePjContent,
 	isValidUpdateContentRequest,
-	isValidUpdatePNameRequest
+	isValidUpdatePNameRequest,
+	isValidUpdateTeamRequest,
+	deletePjContents
 }

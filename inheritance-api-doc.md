@@ -680,6 +680,43 @@ pw: 1111
 
 
 
+### updateTeam api
+
+- 请求路径：/compet/updateTeam
+- 请求方法：post
+- 请求参数
+
+| 属性           | 值类型   | 备注           |
+| -------------- | -------- | -------------- |
+| PId            | string   | 项目id         |
+| me             | object   | 需要包含userId |
+| addMembers     | object[] |                |
+| deletedMembers | object[] |                |
+
+> uploader 的userId ，随cookie发送到后端，
+>
+> 而且有userIdSign, 发送者信息不易伪造，更安全
+
+
+
+- 响应参数
+
+| 参数 | 参数类型 | 参数备注     |
+| ---- | -------- | ------------ |
+| code |          |              |
+| team | object[] | 更新后的team |
+|      |          |              |
+
+- 响应数据
+
+```json
+
+```
+
+
+
+
+
 ### updatePName api
 
 - 请求路径：/compet/updatePName 
@@ -713,7 +750,7 @@ pw: 1111
 
 
 
-### updatePjContents api
+### ！updatePjContents api
 
 - 请求路径：/compet/updatePjContents
 - 请求方法：post

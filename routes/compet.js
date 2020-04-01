@@ -31,6 +31,43 @@ async function updatePName({PId, PName}) {
 	return competProjects.updateOne({PId}, {$set: {PName}})
 }
 
+router.post('/updateTeam', async(ctx) => {
+	try {
+		if(!Tool.isLogin(ctx)) {
+			ctx.body = {
+				code: -1,
+				msg: '未登录'
+			}
+			return ''
+		}
+		const userId = ctx.cookies.get('userId')
+		const { PId, me, addMembers, deletedMembers } = ctx.request.body
+		const leaderPower = addMembers || deletedMembers
+		if(!Pj.isValidUpdateTeamRequest(PId, userId, me, leaderPower)) {
+			ctx.body = {
+				code: -1,
+				msg: 'request is invalid'
+			}
+		} else {
+			console.log('准备更新')
+			// TODO: 先只更新me功能，增加删除成员功能待做
+			const res = await Pj.updatePjMember(me)
+			console.log('updatePjMember 完成')
+			const team = await Pj.getPjTeam(PId)
+			ctx.body = {
+				code: 200,
+				team,
+				res,
+			}
+		}
+	} catch (err) {
+		ctx.body = {
+			code: -1,
+			err
+		}
+	}
+})
+
 router.post('/updatePName', async (ctx) => {
 	try {
 		if(!Tool.isLogin(ctx)) {
@@ -81,6 +118,8 @@ router.post('/updatePjContents', async (ctx) =>{
 			}
 		} else {
 			const [...res] = await Promise.all(contents.map(Pj.updatePjContent))
+			// 删除show：false 项
+			await Pj.deletePjContents({PI: contents[0].PId, show: false})
 			const PSummaryRes = await updatePSummaryByContent(contents[0])
 			ctx.body = {
 				code: 200,
