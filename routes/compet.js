@@ -287,6 +287,5 @@ router.post('/getProject', async(ctx) => {
 	}
 })
 
-// Pj.getProject('128320832')
 
 module.exports = router
