@@ -10,6 +10,158 @@ const {
 	competProjects,
 } = require('../model')
 
+async function updatePSummaryByContent(item) {
+	if(Tool.isUndef(item) 
+  || Tool.isUndef(item.PId) 
+  || item.index !==0){ 
+		return false
+	}
+	const {PId, content} = item
+	let PSummary = ''
+	if(Array.isArray(content)) {
+		PSummary = content.join('\n')
+	} else {
+		PSummary = content
+	}
+	return competProjects.updateOne({PId}, {$set: {PSummary}})
+}
+
+async function updatePName({PId, PName}) {
+	if(!PId || !PName) return
+	return competProjects.updateOne({PId}, {$set: {PName}})
+}
+
+router.post('/deleteSteps', async(ctx) => {
+	try {
+		if(!Tool.isLogin(ctx)) {
+			ctx.body = {
+				code: -1,
+				msg: '未登录'
+			}
+			return ''
+		}
+		const userId = ctx.cookies.get('userId')
+		const { PId, pleanId } = ctx.request.body
+		if(!Pj.isValidDeleteStepsRequest(PId, userId, pleanId)) {
+			ctx.body = {
+				code: -1,
+				msg: 'request is invalid'
+			}
+		} else {
+			const res = await Pj.deleteSteps({PId, pleanId})
+			ctx.body = {
+				code: 200,
+				res,
+			}
+		}
+	} catch (err) {
+		ctx.body = {
+			code: -1,
+			err
+		}
+	}
+})
+
+router.post('/updateSteps', async(ctx) => {
+	try {
+		if(!Tool.isLogin(ctx)) {
+			ctx.body = {
+				code: -1,
+				msg: '未登录'
+			}
+			return ''
+		}
+		const userId = ctx.cookies.get('userId')
+		const {PId, index, pleanId, planName, master, stepsData, codeUrl, activeNum } =  ctx.request.body
+
+		if(!Pj.isValidUpdateStepsRequest(PId, userId, master)) {
+			ctx.body = {
+				code: -1,
+				msg: 'request is invalid'
+			}
+		} else {
+			const res = await Pj.udpateSteps({PId, index, pleanId, planName, master, stepsData, codeUrl, activeNum })
+			ctx.body = {
+				code: 200,
+				res,
+			}
+		}
+	} catch (err) {
+		ctx.body = {
+			code: -1,
+			err
+		}
+	}
+})
+
+router.post('/updateTeam', async(ctx) => {
+	try {
+		if(!Tool.isLogin(ctx)) {
+			ctx.body = {
+				code: -1,
+				msg: '未登录'
+			}
+			return ''
+		}
+		const userId = ctx.cookies.get('userId')
+		const { PId, me, addMembers, deletedMembers } = ctx.request.body
+		const leaderPower = addMembers || deletedMembers
+		if(!Pj.isValidUpdateTeamRequest(PId, userId, me, leaderPower)) {
+			ctx.body = {
+				code: -1,
+				msg: 'request is invalid'
+			}
+		} else {
+			console.log('准备更新')
+			// TODO: 先只更新me功能，增加删除成员功能待做
+			const res = await Pj.updatePjMember(me)
+			console.log('updatePjMember 完成')
+			const team = await Pj.getPjTeam(PId)
+			ctx.body = {
+				code: 200,
+				team,
+				res,
+			}
+		}
+	} catch (err) {
+		ctx.body = {
+			code: -1,
+			err
+		}
+	}
+})
+
+router.post('/updatePName', async (ctx) => {
+	try {
+		if(!Tool.isLogin(ctx)) {
+			ctx.body = {
+				code: -1,
+				msg: '未登录'
+			}
+			return ''
+		}
+		const userId = ctx.cookies.get('userId')
+		const { PId, PName } = ctx.request.body
+		if(!Pj.isValidUpdatePNameRequest(PId, userId)) {
+			ctx.body = {
+				code: -1,
+				msg: 'request is invalid'
+			}
+		} else {
+			const res = await updatePName({PId, PName})
+			ctx.body = {
+				code: 200,
+				res,
+			}
+		}
+	} catch (err) {
+		ctx.body = {
+			code: -1,
+			err
+		}
+	}
+})
+
 router.post('/updatePjContents', async (ctx) =>{
 	try {
 		if(!Tool.isLogin(ctx)) {
@@ -29,9 +181,13 @@ router.post('/updatePjContents', async (ctx) =>{
 			}
 		} else {
 			const [...res] = await Promise.all(contents.map(Pj.updatePjContent))
+			// 删除show：false 项
+			await Pj.deletePjContents({PI: contents[0].PId, show: false})
+			const PSummaryRes = await updatePSummaryByContent(contents[0])
 			ctx.body = {
 				code: 200,
-				res
+				res,
+				PSummaryRes
 			}
 		}
 	} catch (err) {
@@ -194,6 +350,5 @@ router.post('/getProject', async(ctx) => {
 	}
 })
 
-// Pj.getProject('128320832')
 
 module.exports = router

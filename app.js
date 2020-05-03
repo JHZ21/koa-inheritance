@@ -10,6 +10,8 @@ const mongoConfig = require('./config/mongo')
 const fs = require('fs')
 const sslify = require('koa-sslify').default
 
+ 
+
 
 app.use(sslify({port: 4433})) // 强制转为https 端口设为4433
 
@@ -41,7 +43,12 @@ app.use(
 )
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(__dirname + '/public'))
+
+
+app.use(require('koa-static')(__dirname + '/public', {
+	maxage: 31536000000 // 强制缓存一年 单位ms
+}))
+
 
 // logger
 app.use(async (ctx, next) => {

@@ -52,6 +52,7 @@ const projectStepsSchema = new Schema({
 		deadline: String,
 		description: String
 	},
+	codeUrl: String,
 	show: Boolean
 })
 
