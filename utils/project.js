@@ -70,7 +70,7 @@ async function deleteSteps({PId, pleanId}) {
 
 async function udpateSteps(stepsObj) {
 	console.log('udpateSteps')
-	const {PId, index, pleanId, planName, master, stepsData, activeNum } = stepsObj
+	const {PId, index, pleanId, planName, master, stepsData, codeUrl, activeNum } = stepsObj
 	if(!(
 		PId
     && typeof(index) === 'number' 

@@ -72,7 +72,7 @@ router.post('/updateSteps', async(ctx) => {
 			return ''
 		}
 		const userId = ctx.cookies.get('userId')
-		const {PId, index, pleanId, planName, master, stepsData, activeNum } =  ctx.request.body
+		const {PId, index, pleanId, planName, master, stepsData, codeUrl, activeNum } =  ctx.request.body
 
 		if(!Pj.isValidUpdateStepsRequest(PId, userId, master)) {
 			ctx.body = {
@@ -80,7 +80,7 @@ router.post('/updateSteps', async(ctx) => {
 				msg: 'request is invalid'
 			}
 		} else {
-			const res = await Pj.udpateSteps({PId, index, pleanId, planName, master, stepsData, activeNum })
+			const res = await Pj.udpateSteps({PId, index, pleanId, planName, master, stepsData, codeUrl, activeNum })
 			ctx.body = {
 				code: 200,
 				res,

@@ -134,8 +134,11 @@
 | planName  | string   | 规划名                          |
 | master    | object   | 创建者信息userId                |
 | stepsData | object[] | 具体规划步骤                    |
+| codeUrl   | string   | 项目代码的路径                  |
 | activeNum | number   | 完成了步骤数                    |
 | show      | boolean  | 是否展示                        |
+
+
 
 * stepsData schema
 
@@ -728,6 +731,7 @@ pw: 1111
 | planName  | string   | 规划名                          |
 | master    | object   | 创建者信息userId                |
 | stepsData | object[] | 具体规划步骤                    |
+| codeUrl   | string   | 项目代码路径                    |
 | activeNum | number   | 完成了步骤数                    |
 
 > uploader 的userId ，随cookie发送到后端，
