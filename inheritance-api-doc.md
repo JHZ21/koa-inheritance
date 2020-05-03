@@ -680,6 +680,80 @@ pw: 1111
 
 
 
+
+
+### deleteSteps api
+
+- 请求路径：/compet/deleteSteps
+- 请求方法：post
+- 请求参数
+
+| 属性    | 值类型 | 备注                            |
+| ------- | ------ | ------------------------------- |
+| PId     | string | 项目id,随机 16位,  属于哪个项目 |
+| pleanId | string | 规划的id                        |
+
+> uploader 的userId ，随cookie发送到后端，
+>
+> 而且有userIdSign, 发送者信息不易伪造，更安全
+
+
+
+- 响应参数
+
+| 参数 | 参数类型 | 参数备注 |
+| ---- | -------- | -------- |
+| code |          |          |
+|      |          |          |
+
+- 响应数据
+
+```json
+
+```
+
+
+
+### updateSteps api
+
+- 请求路径：/compet/updateSteps
+- 请求方法：post
+- 请求参数
+
+| 属性      | 值类型   | 备注                            |
+| --------- | -------- | ------------------------------- |
+| PId       | string   | 项目id,随机 16位,  属于哪个项目 |
+| index     | number   | 排序顺序                        |
+| pleanId   | string   | 规划的id                        |
+| planName  | string   | 规划名                          |
+| master    | object   | 创建者信息userId                |
+| stepsData | object[] | 具体规划步骤                    |
+| activeNum | number   | 完成了步骤数                    |
+
+> uploader 的userId ，随cookie发送到后端，
+>
+> 而且有userIdSign, 发送者信息不易伪造，更安全
+
+
+
+- 响应参数
+
+| 参数 | 参数类型 | 参数备注     |
+| ---- | -------- | ------------ |
+| code |          |              |
+| team | object[] | 更新后的team |
+|      |          |              |
+
+- 响应数据
+
+```json
+
+```
+
+
+
+
+
 ### updateTeam api
 
 - 请求路径：/compet/updateTeam

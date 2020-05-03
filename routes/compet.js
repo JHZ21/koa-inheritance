@@ -31,6 +31,69 @@ async function updatePName({PId, PName}) {
 	return competProjects.updateOne({PId}, {$set: {PName}})
 }
 
+router.post('/deleteSteps', async(ctx) => {
+	try {
+		if(!Tool.isLogin(ctx)) {
+			ctx.body = {
+				code: -1,
+				msg: '未登录'
+			}
+			return ''
+		}
+		const userId = ctx.cookies.get('userId')
+		const { PId, pleanId } = ctx.request.body
+		if(!Pj.isValidDeleteStepsRequest(PId, userId, pleanId)) {
+			ctx.body = {
+				code: -1,
+				msg: 'request is invalid'
+			}
+		} else {
+			const res = await Pj.deleteSteps({PId, pleanId})
+			ctx.body = {
+				code: 200,
+				res,
+			}
+		}
+	} catch (err) {
+		ctx.body = {
+			code: -1,
+			err
+		}
+	}
+})
+
+router.post('/updateSteps', async(ctx) => {
+	try {
+		if(!Tool.isLogin(ctx)) {
+			ctx.body = {
+				code: -1,
+				msg: '未登录'
+			}
+			return ''
+		}
+		const userId = ctx.cookies.get('userId')
+		const {PId, index, pleanId, planName, master, stepsData, activeNum } =  ctx.request.body
+
+		if(!Pj.isValidUpdateStepsRequest(PId, userId, master)) {
+			ctx.body = {
+				code: -1,
+				msg: 'request is invalid'
+			}
+		} else {
+			const res = await Pj.udpateSteps({PId, index, pleanId, planName, master, stepsData, activeNum })
+			ctx.body = {
+				code: 200,
+				res,
+			}
+		}
+	} catch (err) {
+		ctx.body = {
+			code: -1,
+			err
+		}
+	}
+})
+
 router.post('/updateTeam', async(ctx) => {
 	try {
 		if(!Tool.isLogin(ctx)) {

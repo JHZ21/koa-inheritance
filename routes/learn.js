@@ -293,7 +293,7 @@ router.post('/uploadCard', async (ctx) => {
 			label_2: aSelected[2],
 			show: true
 		}
-		let res = await learnCards.update({id: card.id}, card, {upsert: true})
+		let res = await learnCards.updateOne({id: card.id}, card, {upsert: true})
 		const content  = {
 			id: card.id,
 			articleUrl: card.articleUrl,

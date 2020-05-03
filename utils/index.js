@@ -66,12 +66,18 @@ const validAccount = (value) => {
 const isAllowedFrame = async (url) =>  {
 	try {
 		const res = await axios.get(url)
+		console.log('res.headers[x-frame-options]: ', res.headers['x-frame-options'])
 		return !res.headers['x-frame-options']
+    
 	} catch(err) {
 		if(err.response && err.response.headers){
+			console.log('err.response.headers[x-frame-options]: ', err.response.headers['x-frame-options'])
 			return !err.response.headers['x-frame-options']
 		}
-		console.log('err', err)
+		if(err.config && err.config.headers) {
+			console.log('err.config.headers[x-frame-options]: ', err.config.headers['x-frame-options'])
+			return !err.config.headers['x-frame-options']
+		}
 		return false
 	}
 }
