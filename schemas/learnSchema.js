@@ -15,7 +15,10 @@ const  cardsSchema = new Schema({
 	id: String,
 	articleUrl: String,
 	title: String,
-	uploader: Object,
+	uploader: {
+		name: String,
+		userId: String
+	},
 	isAllowedFrame: Boolean,
 	imgUrl: String,
 	readVolume: Number,

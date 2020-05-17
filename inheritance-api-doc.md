@@ -490,7 +490,8 @@ const nav_data = [
 
 ```
 uploader: {
-	"name": "abc"
+	"name": "abc"，
+	"userId": "sdew234234"
 }
 ```
 
