@@ -259,7 +259,6 @@ router.post('/uploadProject', async (ctx) => {
 			Pj.updatePjContent(contentSum),
 			Pj.updatePjMember(teamLeader)
 		])
-   
 		console.log('projectRes: ', projectRes)
 		console.log('contentRes: ', contentRes)
 		console.log('memberRes: ', memberRes)
