@@ -488,9 +488,10 @@ const nav_data = [
 | label_2        | number  | 分类3的key                             |
 | show           | boolean | 是否展示，false: 被删除,不展示         |
 
-```
+```js
 uploader: {
-	"name": "abc"
+	"name": "abc"，
+	"userId": "sdew234234"
 }
 ```
 

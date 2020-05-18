@@ -8,20 +8,23 @@ const rotationUrlSchema = new Schema({
 const  navDataSchema = new Schema({
 	index: Number,
 	label: String,
-	aData: Array
+	aData: Array | Object
 })
 
 const  cardsSchema = new Schema({
 	id: String,
 	articleUrl: String,
 	title: String,
-	uploader: Object,
+	uploader: {
+		name: String,
+		userId: String
+	},
 	isAllowedFrame: Boolean,
 	imgUrl: String,
 	readVolume: Number,
-	label_0: Number,
-	label_1: Number,
-	label_2: Number,
+	label_0: String,
+	label_1: String,
+	label_2: String,
 	timeStamp: Number,
 	show: Boolean
 })
