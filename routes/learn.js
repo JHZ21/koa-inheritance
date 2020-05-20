@@ -349,4 +349,47 @@ router.post('/deleteCard', async (ctx) => {
 	}
 })
 
+router.post('/transferCard', async (ctx) => {
+	if (!isLogin(ctx)) {
+		ctx.body = {
+			code: -1,
+			msg: '未登录'
+		}
+		return ''
+	}
+	const userId = ctx.cookies.get('userId')
+	let { articleId, aSelected, newASelected } = ctx.request.body
+	try {
+		//TODO: articleId, aSelected, newASelected 是否有权限
+		let changed = !aSelected.every((item, index) => item === newASelected[index])
+		if (!changed) {
+			ctx.body = {
+				code: -1,
+				msg: 'aSelected 未改变'
+			}
+		}
+		let changedLabels = Object.create(null)
+		newASelected.forEach((item,index) => {
+			changedLabels[`label_${index}`] = item
+		})
+		let res = await learnCards.updateOne({id: articleId}, {$set:changedLabels})
+		if(res && res.n >0) {
+			ctx.body = {
+				code: 200,
+				res
+			} 
+		} else {
+			ctx.body = {
+				code: -1,
+				msg: '修改失败'
+			}
+		}
+	} catch(err) {
+		ctx.body = {
+			code: -1,
+			err
+		}
+	}
+})
+
 module.exports = router
