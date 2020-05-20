@@ -483,9 +483,9 @@ const nav_data = [
 | timeStamp      | number  | 创建时间戳                             |
 | readVolume     | number  | 文章阅读量                             |
 | isAllowedFrame | boolean | 网页frame是否允许跨域                  |
-| label_0        | number  | 分类1的key                             |
-| label_1        | number  | 分类2的key                             |
-| label_2        | number  | 分类3的key                             |
+| label_0        | string  | 分类1的key                             |
+| label_1        | string  | 分类2的key                             |
+| label_2        | string  | 分类3的key                             |
 | show           | boolean | 是否展示，false: 被删除,不展示         |
 
 ```js
@@ -1039,7 +1039,32 @@ pw: 1111
 
 ## Learn 
 
+### LearnTransferCard api
 
+* 请求路径：/learn/transferCard
+* 请求方法：post
+* 请求参数
+
+| 属性         | 值类型   | 备注       |
+| ------------ | -------- | ---------- |
+| articleId    | string   | 文章id     |
+| aSelected    | string[] | 原分类数组 |
+| newASelected | string[] | 新分类数组 |
+
+> uploader 的userId ，随cookie发送到后端，
+>
+> 而且有userIdSign, 发送者信息不易伪造，更安全
+
+
+
+- 响应参数
+
+| 参数 | 参数类型 | 参数备注 |
+| ---- | -------- | -------- |
+| code |          |          |
+|      |          |          |
+
+- 响应数据
 
 
 
