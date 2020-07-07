@@ -1050,6 +1050,7 @@ pw: 1111
 | articleId    | string   | 文章id     |
 | aSelected    | string[] | 原分类数组 |
 | newASelected | string[] | 新分类数组 |
+| title        | string   | 文章标题   |
 
 > uploader 的userId ，随cookie发送到后端，
 >

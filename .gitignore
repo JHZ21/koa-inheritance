@@ -3,7 +3,7 @@ node_modules
 /dist
 /public/images/*
 cert
-test.js
+test
 tool.js
 
 

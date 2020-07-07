@@ -266,17 +266,26 @@ router.post('/getCards', async (ctx) => {
 
 router.post('/uploadCard', async (ctx) => {
 	if (!isLogin(ctx)) {
-		ctx.body = {
+		return ctx.body = {
 			code: -1,
 			msg: '未登录'
 		}
-		return ''
 	}
 	const userId = ctx.cookies.get('userId')
 	const userRes = await users.findOne({ userId }).select({ name: 1 })
 	let body = ctx.request.body
 	const aSelected = JSON.parse(body.aSelected)
+  
 	try {
+		const articleId = compress(body.articleUrl)
+		const isExit = await learnCards.findOne({id: articleId})
+		console.log('isExit: ', isExit)
+		if(isExit) {
+			return ctx.body = {
+				code: -1,
+				msg: '文章已经存在'
+			}
+		}
 		let card = {
 			title: body.title,
 			uploader: {
@@ -285,7 +294,7 @@ router.post('/uploadCard', async (ctx) => {
 			},  //TODO: 应涉及用户对象
 			articleUrl: body.articleUrl,
 			isAllowedFrame: await isAllowedFrame(body.articleUrl),
-			id: compress(body.articleUrl),  // 以加密后的文章url加唯一标志
+			id: articleId,  // 以加密后的文章url加唯一标志
 			readVolume: 0, // 阅读量
 			timeStamp: body.timeStamp || new Date().getTime(), // 考虑，保留发送情况
 			imgUrl: await uploadFile(ctx.request.files.file, 'images'),
@@ -301,7 +310,7 @@ router.post('/uploadCard', async (ctx) => {
 			comments: []
 		}
 		let contentRes = await updateLearnContent(content)
-		ctx.body = {
+		return ctx.body = {
 			code: 200,
 			res,
 			contentRes,
@@ -309,7 +318,7 @@ router.post('/uploadCard', async (ctx) => {
 		}
 	} catch (err) {
 		console.log(err)
-		ctx.body = {
+		return ctx.body = {
 			code: -1,
 			err
 		}
@@ -358,7 +367,7 @@ router.post('/transferCard', async (ctx) => {
 		return ''
 	}
 	const userId = ctx.cookies.get('userId')
-	let { articleId, aSelected, newASelected } = ctx.request.body
+	let { articleId, aSelected, newASelected, title } = ctx.request.body
 	try {
 		//TODO: articleId, aSelected, newASelected 是否有权限
 		let changed = !aSelected.every((item, index) => item === newASelected[index])
@@ -368,11 +377,12 @@ router.post('/transferCard', async (ctx) => {
 				msg: 'aSelected 未改变'
 			}
 		}
-		let changedLabels = Object.create(null)
+		let changedObj = Object.create(null)
 		newASelected.forEach((item,index) => {
-			changedLabels[`label_${index}`] = item
+			changedObj[`label_${index}`] = item
 		})
-		let res = await learnCards.updateOne({id: articleId}, {$set:changedLabels})
+		title && (changedObj.title = title)
+		let res = await learnCards.updateOne({id: articleId}, {$set:changedObj})
 		if(res && res.n >0) {
 			ctx.body = {
 				code: 200,

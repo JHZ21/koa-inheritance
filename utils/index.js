@@ -67,11 +67,16 @@ const isAllowedFrame = async (url) =>  {
 	try {
 		const res = await axios.get(url)
 		console.log('res.headers[x-frame-options]: ', res.headers['x-frame-options'])
-		return !res.headers['x-frame-options']
+		const CSP = res.headers['content-security-policy']
+		console.log('frame-ancestors ', CSP.search('frame-ancestors') > -1)
+		return !(res.headers['x-frame-options'] || CSP.search('frame-ancestors') > -1)
     
 	} catch(err) {
 		if(err.response && err.response.headers){
-			console.log('err.response.headers[x-frame-options]: ', err.response.headers['x-frame-options'])
+			console.log(' err.response.headers: ',  err.response.headers)
+			console.log('err.response.headers[x-frame-options]: ', ['x-frame-options'])
+			const CSP = err.response.headers['content-security-policy']
+			console.log('CSP: ', CSP)
 			return !err.response.headers['x-frame-options']
 		}
 		if(err.config && err.config.headers) {
