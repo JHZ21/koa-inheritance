@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const  navDataSchema = new Schema({
 	index: Number,
 	label: String,
-	aData: Array
+	aData: Array | Object
 })
 
 const projectsSchema = new Schema({
